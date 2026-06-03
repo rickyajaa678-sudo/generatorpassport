@@ -16,22 +16,20 @@
             background-size: cover;
             background-color: #1c2e4a; 
             transition: background 0.3s ease;
-            overflow: hidden; /* Mengunci layar agar tidak bisa di-scroll akibat salju */
+            overflow: hidden;
             position: relative;
         }
 
-        /* Tempat menampung butiran salju agar tidak menutupi tombol klik */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Penting! Agar jari/kursor mouse bisa menembus salju untuk klik tombol */
+            pointer-events: none;
             z-index: 10;
         }
 
-        /* Bentuk butiran salju */
         .snowflake {
             position: absolute;
             background: white;
@@ -54,7 +52,7 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 100; /* Berada di atas lapisan salju agar selalu bisa diklik */
+            z-index: 100;
             transition: all 0.3s ease;
         }
 
@@ -75,6 +73,16 @@
             border-color: #f1c40f;
         }
 
+        /* Style khusus untuk kotak quotes saul di mode gelap */
+        .dark-mode .quote-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #f1c40f;
+            color: #ddd;
+        }
+        .dark-mode .quote-author {
+            color: #f1c40f;
+        }
+
         h2 {
             color: #2c3e50; 
             margin-top: 10px;
@@ -84,7 +92,6 @@
             transition: color 0.3s ease;
         }
 
-        /* Tombol Utama */
         button { 
             background-color: #e74c3c; 
             color: white; 
@@ -109,7 +116,6 @@
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Tombol Switch Dark/Light Mode */
         .theme-toggle {
             position: absolute;
             top: 15px;
@@ -142,6 +148,31 @@
             transition: all 0.3s ease;
         }
 
+        /* Desain Elegan Kotak Quotes */
+        .quote-container {
+            margin-top: 25px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.03);
+            border-left: 4px solid #e67e22;
+            border-radius: 4px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        .quote-text {
+            font-style: italic;
+            font-size: 14.5px;
+            line-height: 1.5;
+            color: #555;
+            margin: 0 0 6px 0;
+        }
+        .quote-author {
+            font-size: 12px;
+            font-weight: bold;
+            color: #e67e22;
+            text-align: right;
+            margin: 0;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -155,10 +186,8 @@
 </head>
 <body>
 
-    <!-- Wadah khusus efek salju jatuh -->
     <div id="snowflake-container"></div>
 
-    <!-- KOTAK GENERATOR UTAMA -->
     <div class="card">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
@@ -169,12 +198,18 @@
         <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
         
         <div id="alert"></div>
+
+        <!-- KOTAK QUOTES SAUL TERPASANG DI SINI -->
+        <div class="quote-container">
+            <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
+            <p class="quote-author">— Jaguar D. Saul</p>
+        </div>
     </div>
 
     <script>
-        // --- 1. LOGIKA UTAMA EFEK SALJU BERGUGURAN ---
+        // Logika Salju
         const container = document.getElementById('snowflake-container');
-        const maxSnowflakes = 40; // Batas jumlah butiran salju di layar agar super ringan
+        const maxSnowflakes = 40;
 
         function createSnowflake() {
             if (container.children.length >= maxSnowflakes) return;
@@ -182,33 +217,26 @@
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
 
-            // Ukuran acak butiran salju (antara 2px sampai 6px)
             const size = Math.random() * 4 + 2;
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
-
-            // Posisi kiri awal acak (0% - 100% lebar layar)
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `-10px`;
 
-            // Kecepatan jatuh acak
-            const duration = Math.random() * 5 + 5; // 5 sampai 10 detik
-            
+            const duration = Math.random() * 5 + 5;
             container.appendChild(snowflake);
 
-            // Pergerakan animasi turun menggunakan sistem interval koordinat ringan
             let topPos = -10;
             let leftPos = parseFloat(snowflake.style.left);
-            const drift = Math.random() * 0.4 - 0.2; // Efek tertiup angin ke kanan/kiri sedikit
+            const drift = Math.random() * 0.4 - 0.2;
 
             const fallInterval = setInterval(() => {
-                topPos += Math.random() * 1 + 0.5; // Kecepatan meluncur ke bawah
+                topPos += Math.random() * 1 + 0.5;
                 leftPos += drift;
 
                 snowflake.style.top = `${topPos}px`;
                 snowflake.style.left = `${leftPos}%`;
 
-                // Jika salju sudah melewati bagian bawah layar, hapus untuk hemat memori
                 if (topPos > window.innerHeight) {
                     clearInterval(fallInterval);
                     snowflake.remove();
@@ -216,11 +244,9 @@
             }, 20);
         }
 
-        // Jalankan pembuatan butiran salju secara bertahap setiap 300 milidetik
         setInterval(createSnowflake, 300);
 
-
-        // --- 2. LOGIKA FITUR DARK/LIGHT MODE ---
+        // Logika Tema
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
@@ -234,7 +260,7 @@
             }
         }
 
-        // --- 3. LOGIKA GENERATOR KODE BUAH ---
+        // Logika Generator
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
