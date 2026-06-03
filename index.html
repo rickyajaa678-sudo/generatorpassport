@@ -3,27 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Buah dan Angka</title>
+    <title>Generator Straw Hat Code</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
-        button { background-color: #007bff; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; margin: 10px; transition: background 0.2s; font-weight: bold;}
-        button:hover { background-color: #0056b3; }
-        .copy-btn { background-color: #28a745; }
-        .copy-btn:hover { background-color: #218838; }
-        #nameDisplay { font-size: 24px; font-weight: bold; margin: 20px 0; min-height: 35px; color: #333; padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ccc; letter-spacing: 1px; }
-        #alert { color: #28a745; font-size: 14px; height: 20px; font-weight: bold; }
+        /* Animasi bergerak untuk latar belakang gradasi */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            /* Latar belakang gradasi bergerak bertema petualangan laut */
+            background: linear-gradient(-45deg, #e67e22, #f1c40f, #3498db, #2980b9);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            text-align: center; 
+            max-width: 400px; 
+            width: 100%; 
+        }
+
+        /* Tombol dengan efek animasi membal (scale) saat diklik */
+        button { 
+            background-color: #e67e22; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.2s ease; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button:hover { 
+            background-color: #d35400; 
+            transform: translateY(-2px); /* Tombol sedikit naik saat disentuh */
+        }
+        button:active {
+            transform: scale(0.95); /* Efek membal mendelep saat diklik */
+        }
+
+        .copy-btn { background-color: #27ae60; }
+        .copy-btn:hover { background-color: #219a52; }
+
+        /* Animasi fade-in halus untuk teks kode saat berganti */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #nameDisplay { 
+            font-size: 24px; 
+            font-weight: bold; 
+            margin: 20px 0; 
+            min-height: 35px; 
+            color: #2c3e50; 
+            padding: 12px; 
+            background: #f8f9fa; 
+            border-radius: 8px; 
+            border: 2px dashed #e67e22; 
+            letter-spacing: 2px; 
+        }
+        .animate-text {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Generator Kode Buah</h2>
+        <h2 style="color: #2c3e50; margin-top: 0;">Straw Hat Generator</h2>
         <!-- Tempat teks muncul -->
         <div id="nameDisplay">klik tombol di bawah</div>
         
         <!-- Tombol Aksi -->
-        <button onclick="generateFruitNumberCode()">Acak Kode</button>
+        <button onclick="generateOnePieceCode()">Acak Kode</button>
         <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
         
         <!-- Notifikasi Salin -->
@@ -31,29 +101,35 @@
     </div>
 
     <script>
-        // Daftar nama buah dalam huruf kecil
-        const fruits = [
-            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
-            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
+        // Daftar nama bertema Sunny Go dan Kru Topi Jerami (huruf kecil semua)
+        const strawHats = [
+            "luffy", "zoro", "nami", "usopp", "sanji", "chopper", 
+            "robin", "franky", "brook", "jinbe", "sunnygo"
         ];
 
-        function generateFruitNumberCode() {
-            // 1. Pilih nama buah secara acak
-            const randomIndex = Math.floor(Math.random() * fruits.length);
-            let result = fruits[randomIndex];
+        function generateOnePieceCode() {
+            // 1. Pilih nama secara acak
+            const randomIndex = Math.floor(Math.random() * strawHats.length);
+            let result = strawHats[randomIndex];
             
-            // 2. Jika nama buah kepanjangan (lebih dari 6 karakter agar tersisa ruang untuk angka), potong sedikit
+            // 2. Jika nama kepanjangan (lebih dari 6 karakter), potong sedikit agar muat angka
             if (result.length > 6) {
                 result = result.substring(0, 5);
             }
             
-            // 3. Tambahkan angka acak di belakangnya sampai total panjangnya tepat 8 karakter
+            // 3. Tambahkan angka acak di belakangnya hingga total panjang tepat 8 karakter
             while (result.length < 8) {
-                const randomDigit = Math.floor(Math.random() * 10); // Angka 0-9
+                const randomDigit = Math.floor(Math.random() * 10);
                 result += randomDigit;
             }
             
-            document.getElementById("nameDisplay").innerText = result;
+            // Tampilkan hasil dengan tambahan animasi teks memudar masuk
+            const display = document.getElementById("nameDisplay");
+            display.innerText = result;
+            display.classList.remove("animate-text");
+            void display.offsetWidth; // Memicu ulang jalannya animasi
+            display.classList.add("animate-text");
+            
             document.getElementById("alert").innerText = ""; 
         }
 
