@@ -1,103 +1,239 @@
-<!-- =============== KOTAK LIVE CHAT =============== -->
-<div id="chatWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
-    <!-- Tombol untuk Buka/Tutup Chat -->
-    <button id="chatToggle" onclick="toggleChat()" style="background: #e67e22; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; margin: 0;">
-        💬 Chat Bajak Laut
-    </button>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kode Buah - Edisi Kru Topi Jerami</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            /* Menggunakan gambar Luffy Gear 5 milik Anda */
+            background: url('thumb-1920-1329456.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #1c2e4a; 
+        }
 
-    <!-- Tampilan Jendela Chat (Awalnya Tersembunyi) -->
-    <div id="chatBox" style="display: none; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); border: 3px solid #e67e22; flex-direction: column; overflow: hidden; margin-top: 10px;">
-        <!-- Header Chat -->
-        <div style="background: #e67e22; color: white; padding: 12px; font-weight: bold; font-size: 16px; text-align: center;">
-            ☠️ Kapten Sunny Go Bot
-        </div>
-        <!-- Area Isi Pesan -->
-        <div id="chatBody" style="flex: 1; padding: 10px; overflow-y: auto; background: #fdf6e2; display: flex; flex-direction: column; gap: 8px;">
-            <!-- Pesan Sambutan Awal dari Bot -->
-            <div style="background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;">
-                Halo nakama! Ada yang bisa kapten bantu? Coba ketik "halo", "fitur", atau "code".
+        /* Kartu utama generator buah */
+        .card { 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            text-align: center; 
+            max-width: 400px; 
+            width: 90%; 
+            border: 4px solid #e67e22; 
+        }
+
+        h2 {
+            color: #2c3e50; 
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        button { 
+            background-color: #e74c3c; 
+            color: white; 
+            border: none; 
+            padding: 14px 28px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.2s ease; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        button:hover { 
+            background-color: #c0392b; 
+            transform: translateY(-2px); 
+        }
+        button:active {
+            transform: scale(0.95); 
+        }
+
+        .copy-btn { background-color: #27ae60; }
+        .copy-btn:hover { background-color: #219a52; }
+
+        #nameDisplay { 
+            font-size: 26px; 
+            font-weight: bold; 
+            margin: 20px 0; 
+            min-height: 38px; 
+            color: #d35400; 
+            padding: 12px; 
+            background: #fdf6e2; 
+            border-radius: 8px; 
+            border: 2px dashed #e67e22; 
+            letter-spacing: 2px; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-text {
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. KOTAK GENERATOR UTAMA (YANG SEMPAT HILANG) -->
+    <div class="card">
+        <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
+        <div id="nameDisplay">klik tombol di bawah</div>
+        
+        <button onclick="generateFruitNumberCode()">Acak Kode</button>
+        <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+        
+        <div id="alert"></div>
+    </div>
+
+
+    <!-- 2. WIDGET LIVE CHAT AUTO BALAS (DI POJOK KANAN BAWAH) -->
+    <div id="chatWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
+        <!-- Tombol untuk Buka/Tutup Chat -->
+        <button id="chatToggle" onclick="toggleChat()" style="background: #e67e22; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; margin: 0;">
+            💬 Chat Bajak Laut
+        </button>
+
+        <!-- Tampilan Jendela Chat -->
+        <div id="chatBox" style="display: none; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); border: 3px solid #e67e22; flex-direction: column; overflow: hidden; margin-top: 10px;">
+            <div style="background: #e67e22; color: white; padding: 12px; font-weight: bold; font-size: 16px; text-align: center;">
+                ☠️ Kapten Sunny Go Bot
+            </div>
+            <div id="chatBody" style="flex: 1; padding: 10px; overflow-y: auto; background: #fdf6e2; display: flex; flex-direction: column; gap: 8px;">
+                <div style="background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;">
+                    Halo nakama! Ada yang bisa kapten bantu? Coba ketik "halo", "fitur", atau "code".
+                </div>
+            </div>
+            <div style="display: flex; border-top: 1px solid #ccc; padding: 5px; background: white;">
+                <input type="text" id="chatInput" placeholder="Ketik pesan di sini..." style="flex: 1; border: none; padding: 8px; outline: none; font-size: 14px;" onkeypress="checkEnter(event)">
+                <button onclick="sendMessage()" style="background: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 0;">Kirim</button>
             </div>
         </div>
-        <!-- Kolom Ketik Pesan -->
-        <div style="display: flex; border-top: 1px solid #ccc; padding: 5px; background: white;">
-            <input type="text" id="chatInput" placeholder="Ketik pesan di sini..." style="flex: 1; border: none; padding: 8px; outline: none; font-size: 14px;" onkeypress="checkEnter(event)">
-            <button onclick="sendMessage()" style="background: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 0;">Kirim</button>
-        </div>
     </div>
-</div>
 
-<script>
-// Fungsi Buka Tutup Jendela Chat
-function toggleChat() {
-    const chatBox = document.getElementById("chatBox");
-    const chatToggle = document.getElementById("chatToggle");
-    if (chatBox.style.display === "none" || chatBox.style.display === "") {
-        chatBox.style.display = "flex";
-        chatToggle.innerText = "✖ Tutup";
-    } else {
-        chatBox.style.display = "none";
-        chatToggle.innerText = "💬 Chat Bajak Laut";
-    }
-}
 
-// Fungsi Deteksi Tombol Enter saat Ketik
-function checkEnter(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-}
+    <!-- 3. LOGIKA JAVASCRIPT (SISTEM GENERATOR & AUTO BALAS CHAT) -->
+    <script>
+        // --- Bagian 1: Logika Generator Buah ---
+        const fruits = [
+            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
+            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
+        ];
 
-// Fungsi Kirim Pesan Pengunjung
-function sendMessage() {
-    const input = document.getElementById("chatInput");
-    const messageText = input.value.trim();
-    if (messageText === "") return;
+        function generateFruitNumberCode() {
+            const randomIndex = Math.floor(Math.random() * fruits.length);
+            let result = fruits[randomIndex];
+            
+            if (result.length > 6) {
+                result = result.substring(0, 5);
+            }
+            
+            while (result.length < 8) {
+                const randomDigit = Math.floor(Math.random() * 10);
+                result += randomDigit;
+            }
+            
+            const display = document.getElementById("nameDisplay");
+            display.innerText = result;
+            display.classList.remove("animate-text");
+            void display.offsetWidth; 
+            display.classList.add("animate-text");
+            
+            document.getElementById("alert").innerText = ""; 
+        }
 
-    const chatBody = document.getElementById("chatBody");
+        function copyCode() {
+            const codeText = document.getElementById("nameDisplay").innerText;
+            if (codeText === 'klik tombol di bawah') return;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const alertDiv = document.getElementById("alert");
+                alertDiv.innerText = "✓ Kode berhasil disalin!";
+                setTimeout(() => { alertDiv.innerText = ""; }, 2000);
+            }).catch(err => {
+                alert("Gagal menyalin teks");
+            });
+        }
 
-    // 1. Tampilkan pesan user ke layar (di sebelah kanan)
-    const userDiv = document.createElement("div");
-    userDiv.style = "background: #3498db; color: white; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-end; font-size: 14px;";
-    userDiv.innerText = messageText;
-    chatBody.appendChild(userDiv);
+        // --- Bagian 2: Logika Jendela Live Chat ---
+        function toggleChat() {
+            const chatBox = document.getElementById("chatBox");
+            const chatToggle = document.getElementById("chatToggle");
+            if (chatBox.style.display === "none" || chatBox.style.display === "") {
+                chatBox.style.display = "flex";
+                chatToggle.innerText = "✖ Tutup";
+            } else {
+                chatBox.style.display = "none";
+                chatToggle.innerText = "💬 Chat Bajak Laut";
+            }
+        }
 
-    // Kosongkan kolom input
-    input.value = "";
-    chatBody.scrollTop = chatBody.scrollHeight;
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
 
-    // 2. Berikan efek jeda mengetik selama 0.8 detik sebelum bot membalas otomatis
-    setTimeout(() => {
-        const botReply = getAutoReply(messageText);
-        const botDiv = document.createElement("div");
-        botDiv.style = "background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;";
-        botDiv.innerText = botReply;
-        chatBody.appendChild(botDiv);
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }, 800);
-}
+        function sendMessage() {
+            const input = document.getElementById("chatInput");
+            const messageText = input.value.trim();
+            if (messageText === "") return;
 
-// LOGIKA OTOMATIS AUTO BALAS (Bisa Anda tambah/ubah sesuka hati)
-function getAutoReply(msg) {
-    const teks = msg.toLowerCase(); // Ubah ke huruf kecil semua agar mudah dideteksi
+            const chatBody = document.getElementById("chatBody");
 
-    if (teks.includes("halo") || teks.includes("hai") || teks.includes("p")) {
-        return "Halo juga nakama! Selamat datang di kapal Thousand Sunny!";
-    } 
-    else if (teks.includes("fitur") || teks.includes("cara")) {
-        return "Situs ini adalah generator kode buah otomatis! Klik saja tombol merah 'Acak Kode' untuk membuat kode 8 digit, lalu klik 'Salin Kode' untuk mencopynya.";
-    } 
-    else if (teks.includes("code") || teks.includes("kode")) {
-        return "Kodenya aman kok, dijamin acak unik dan panjangnya pas 8 digit huruf kecil + angka!";
-    } 
-    else if (teks.includes("luffy") || teks.includes("gear 5")) {
-        return "Gomu Gomu no Bajrang Gun!! Luffy mode Dewa Nika siap mengacak kodemu!";
-    }
-    else if (teks.includes("terima kasih") || teks.includes("makasih")) {
-        return "Sama-sama nakama! Berlayar bersamaku menyenangkan!";
-    }
-    else {
-        // Balasan default jika bot tidak mengerti kata kuncinya
-        return "Maaf nakama, Kapten tidak paham arti '" + msg + "'. Coba ketik kata kunci seperti 'halo', 'fitur', atau 'luffy'.";
-    }
-}
-</script>
+            const userDiv = document.createElement("div");
+            userDiv.style = "background: #3498db; color: white; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-end; font-size: 14px;";
+            userDiv.innerText = messageText;
+            chatBody.appendChild(userDiv);
+
+            input.value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            setTimeout(() => {
+                const botReply = getAutoReply(messageText);
+                const botDiv = document.createElement("div");
+                botDiv.style = "background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;";
+                botDiv.innerText = botReply;
+                chatBody.appendChild(botDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 800);
+        }
+
+        // --- Bagian 3: Logika Kata Kunci Auto Balas ---
+        function getAutoReply(msg) {
+            const teks = msg.toLowerCase();
+
+            if (teks.includes("halo") || teks.includes("hai") || teks.includes("p")) {
+                return "Halo juga nakama! Selamat datang di kapal Thousand Sunny!";
+            } 
+            else if (teks.includes("fitur") || teks.includes("cara")) {
+                return "Situs ini adalah generator kode buah otomatis! Klik saja tombol merah 'Acak Kode' untuk membuat kode 8 digit, lalu klik 'Salin Kode' untuk mencopynya.";
+            } 
+            else if (teks.includes("code") || teks.includes("kode")) {
+                return "Kodenya aman kok, dijamin acak unik dan panjangnya pas 8 digit huruf kecil + angka!";
+            } 
+            else if (teks.includes("luffy") || teks.includes("gear 5") || teks.includes("kaido")) {
+                return "Gomu Gomu no Bajrang Gun!! Luffy mode Dewa Nika siap mengacak kodemu!";
+            }
+            else if (teks.includes("terima kasih") || teks.includes("makasih")) {
+                return "Sama-sama nakama! Berlayar bersamaku menyenangkan!";
+            }
+            else {
+                return "Maaf nakama, Kapten tidak paham arti '" + msg + "'. Coba ketik kata kunci seperti 'halo', 'fitur', atau 'luffy'.";
+            }
+        }
