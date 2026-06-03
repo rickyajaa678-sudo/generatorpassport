@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thousand Sunny 3D Ocean Simulator</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #1a2a6c, #2759a2, #4a77bd);
+            font-family: 'Segoe UI', sans-serif;
+            perspective: 1000px; /* Memberikan efek ruang 3D nyata */
+        }
+
+        /* Langit Malam Grand Line */
+        .sky {
+            position: absolute;
+            width: 100%;
+            height: 50vh;
+            background: linear-gradient(to bottom, #0b132b, #1c2541);
+            z-index: 1;
+        }
+
+        .moon {
+            position: absolute;
+            top: 50px;
+            left: 70%;
+            width: 80px;
+            height: 80px;
+            background: #fdf6e2;
+            border-radius: 50%;
+            box-shadow: 0 0 40px #fdf6e2;
+        }
+
+        /* ========================================================
+           LAUTAN 3D BERGERAK
+           ======================================================== */
+        .ocean {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 55vh;
+            background: linear-gradient(to bottom, #2980b9, #1f4068);
+            transform-style: preserve-3d;
+            z-index: 5;
+        }
+
+        /* Lapisan Ombak Depan */
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            bottom: 0;
+            background-image: radial-gradient(circle at 50% -20%, transparent 50%, #1f4068 52%), 
+                              radial-gradient(circle at 0% 120%, #2980b9 40%, transparent 42%);
+            background-size: 200px 100%;
+            opacity: 0.8;
+            animation: waveMove 6s linear infinite;
+        }
+
+        .wave-back {
+            bottom: 30px;
+            opacity: 0.5;
+            animation: waveMove 9s linear infinite reverse;
+            background-image: radial-gradient(circle at 50% -20%, transparent 50%, #162447 52%);
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ========================================================
+           KAPAL THOUSAND SUNNY 3D (KODE CSS MURNI)
+           ======================================================== */
+        .ship-container {
+            position: absolute;
+            bottom: 20vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            transform-style: preserve-3d;
+            animation: shipSway 4s ease-in-out infinite alternate;
+        }
+
+        /* Animasi Kapal Goyang Mengikuti Ombak */
+        @keyframes shipSway {
+            0% { transform: translateX(-50%) translateY(0) rotateX(2deg) rotateY(-5deg) rotateZ(-2deg); }
+            100% { transform: translateX(-50%) translateY(15px) rotateX(-3deg) rotateY(5deg) rotateZ(3deg); }
+        }
+
+        .ship {
+            position: relative;
+            width: 180px;
+            height: 80px;
+            background: #e67e22; /* Lambung Kayu Oranye Sunny Go */
+            border-radius: 0 0 100px 100px;
+            border-top: 15px solid #f1c40f; /* Dek Atas Kuning */
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Kepala Singa Sunny Go */
+        .ship-head {
+            position: absolute;
+            top: -25px;
+            right: -25px;
+            width: 45px;
+            height: 45px;
+            background: #f1c40f;
+            border-radius: 50%;
+            border: 5px solid #e67e22;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .ship-head::before {
+            content: "☠️";
+            position: absolute;
+            top: 8px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        /* Tiang Utama Kapal */
+        .mast {
+            position: absolute;
+            bottom: 75px;
+            left: 70px;
+            width: 10px;
+            height: 140px;
+            background: #7f8c8d;
+            border-radius: 5px;
+        }
+
+        /* Layar Utama Megah */
+        .sail {
+            position: absolute;
+            top: 15px;
+            left: -55px;
+            width: 120px;
+            height: 90px;
+            background: #f3f3f3;
+            border-radius: 10px 10px 40px 40px;
+            box-shadow: inset 0 -20px 30px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.2);
+            animation: sailBillow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes sailBillow {
+            0% { transform: scaleX(0.95) skewY(1deg); }
+            100% { transform: scaleX(1.05) skewY(-1deg); }
+        }
+
+        /* Bendera Straw Hat di Atas Tiang */
+        .flag {
+            position: absolute;
+            top: -5px;
+            left: 5px;
+            width: 35px;
+            height: 22px;
+            background: #2c3e50;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 22px;
+            border-radius: 3px;
+            animation: flagWave 0.5s linear infinite alternate;
+        }
+
+        @keyframes flagWave {
+            0% { transform: skewY(4deg); }
+            100% { transform: skewY(-4deg); }
+        }
+
+        /* ========================================================
+           KOTAK DASHBOARD AKUN BAJAK LAUT (KONTROLER)
+           ======================================================== */
+        .dashboard {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 100;
+            max-width: 280px;
+        }
+
+        .dashboard h3 { margin: 0 0 10px 0; font-size: 18px; color: #f1c40f; letter-spacing: 1px; }
+        .status-item { font-size: 13px; margin: 8px 0; display: flex; justify-content: space-between; opacity: 0.9; }
+        .status-item span { font-weight: bold; color: #f1c40f; }
+
+        /* Tombol Kemudi Interaktif */
+        .wheel-btn {
+            width: 100%;
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .wheel-btn:hover { background: #d35400; transform: translateY(-2px); }
+        .wheel-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <!-- Lapisan Langit Malam -->
+    <div class="sky">
+        <div class="moon"></div>
+    </div>
+
+    <!-- Kontroler Dashboard Akun Bajak Laut -->
+    <div class="dashboard">
+        <h3>⚓ SUNNY DASHBOARD</h3>
+        <div class="status-item">Kapten: <span>Luffy (Gear 5)</span></div>
+        <div class="status-item">Lokasi: <span>Grand Line (Wano)</span></div>
+        <div class="status-item">Kecepatan Laut: <span id="speedTxt">12 Knot</span></div>
+        <div class="status-item">Status Cuaca: <span>Cerah Bersalju</span></div>
+        <button class="wheel-btn" onclick="steerShip()">🔄 PUTAR KEMUDI</button>
+    </div>
+
+    <!-- Kapal Thousand Sunny 3D -->
+    <div class="ship-container" id="sunnyShip">
+        <div class="mast">
+            <div class="sail"></div>
+            <div class="flag">☠️</div>
+        </div>
+        <div class="ship">
+            <div class="ship-head"></div>
+        </div>
+    </div>
+
+    <!-- Lapisan Lautan 3D Bergerak -->
+    <div class="ocean">
+        <div class="wave wave-back"></div>
+        <div class="wave"></div>
+    </div>
+
+    <script>
+        // Fungsi Interaktif: Mengubah kecepatan berlayar saat tombol kemudi diklik
+        let speeds = ["12 Knot", "25 Knot (Coupe de Burst!)", "5 Knot", "18 Knot"];
+        let count = 0;
+
+        function steerShip() {
+            count = (count + 1) % speeds.length;
+            document.getElementById("speedTxt").innerText = speeds[count];
+            
+            // Memberikan efek kejutan animasi akselerasi pada kapal
+            const ship = document.getElementById("sunnyShip");
+            ship.style.animationDuration = count === 1 ? "1.5s" : "4s";
+            
+            setTimeout(() => {
+                alert("🏴‍☠️ Kemudi diputar! Kecepatan Sunny Go disesuaikan ke " + speeds[count] + "!");
+            }, 100);
+        }
+    </script>
+</body>
+</html>
