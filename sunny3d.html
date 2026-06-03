@@ -15,9 +15,7 @@
         }
         h1 { margin: 5px 0; font-size: 20px; color: #f1c40f; text-align: center; }
 
-        /* ========================================================
-           STYLE LOBBY DAFTAR KRU (AWAL GAME)
-           ======================================================== */
+        /* LOBBY DAFTAR KRU */
         .lobby-container {
             background: #1c2d37; padding: 30px; border-radius: 16px;
             border: 3px solid #f1c40f; max-width: 500px; width: 95%;
@@ -48,12 +46,8 @@
             cursor: pointer; box-shadow: 0 5px 15px rgba(231,76,60,0.4);
         }
 
-        /* ========================================================
-           STYLE PAPAN UTAMA GAME (AWALNYA TERSEMBUNYI)
-           ======================================================== */
+        /* STRUKTUR GAME UTAMA */
         .game-interface { display: none; width: 100%; max-width: 1000px; gap: 15px; margin-top: 10px; }
-        @media(min-width: 800px) { .game-interface { display: none; flex-direction: row; } }
-
         .board-wrapper { flex: 1.2; display: flex; justify-content: center; }
         .board {
             display: grid; grid-template-columns: repeat(11, 1fr); grid-template-rows: repeat(11, 1fr);
@@ -69,13 +63,12 @@
         .color-bar { width: 100%; height: 6px; margin-bottom: 2px; }
         .tile-price { font-size: 6px; color: #7f8c8d; margin-top: auto; }
 
-        /* Kelompok Warna Petak */
         .c-brown { background: #8b5a2b; } .c-cyan { background: #87ceeb; }
         .c-pink { background: #ff69b4; } .c-orange { background: #ffa500; }
         .c-red { background: #ff0000; } .c-yellow { background: #ffff00; }
         .c-green { background: #008000; } .c-blue { background: #0000ff; }
 
-        /* PANEL STATUS & KONTROL KANAN */
+        /* PANEL KANAN */
         .panel {
             flex: 0.8; background: rgba(255, 255, 255, 0.05); padding: 15px;
             border-radius: 12px; border: 2px solid #e67e22; display: flex; flex-direction: column; gap: 10px;
@@ -97,49 +90,37 @@
         .panel button:hover { background: #d35400; }
         .panel button:disabled { background: #7f8c8d; cursor: not-allowed; }
 
-        /* ANIMASI PION BERJALAN */
+        /* PION DYNAMIC */
         .pion-container { display: flex; gap: 2px; justify-content: center; align-items: center; flex-wrap: wrap; width: 100%; margin-top: auto; min-height: 12px; }
-        .pion {
-            width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #fff;
-            display: inline-block; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+        .pion { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #fff; display: inline-block; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
         .p0-pion { background: #e74c3c; } .p1-pion { background: #3498db; }
         .p2-pion { background: #2ecc71; } .p3-pion { background: #f1c40f; }
 
-        #gameLog {
-            height: 100px; overflow-y: auto; background: rgba(0,0,0,0.4);
-            padding: 8px; border-radius: 6px; font-size: 11px; border: 1px solid #7f8c8d;
-        }
+        #gameLog { height: 100px; overflow-y: auto; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; font-size: 11px; border: 1px solid #7f8c8d; }
     </style>
 </head>
 <body>
 
-    <!-- ========================================================
-       1. TAMPILAN LOBBY MULTIPLAYER (SESUAI GAMBAR ANDA)
-       ======================================================== -->
+    <!-- LOBBY SCREEN -->
     <div class="lobby-container" id="lobbyScreen">
         <div class="lobby-title">🏴‍☠️ DAFTAR KRU BAJAK LAUT 🏴‍☠️</div>
         <div class="lobby-desc">Minimal wajib ada 4 orang krews yang menekan tombol JOIN untuk mulai bermain.</div>
         
-        <!-- Row Player 1 -->
         <div class="input-row">
             <div class="input-accent" style="background: #e74c3c;"></div>
             <input type="text" id="inputP0" value="Ricky AKA LUFFY">
             <button class="join-btn" id="btnP0" onclick="joinPlayer(0)">JOIN</button>
         </div>
-        <!-- Row Player 2 -->
         <div class="input-row">
             <div class="input-accent" style="background: #3498db;"></div>
             <input type="text" id="inputP1" value="Moi AKA ZORO">
             <button class="join-btn" id="btnP1" onclick="joinPlayer(1)">JOIN</button>
         </div>
-        <!-- Row Player 3 -->
         <div class="input-row">
             <div class="input-accent" style="background: #2ecc71;"></div>
             <input type="text" id="inputP2" value="Mei AKA NAMI">
             <button class="join-btn" id="btnP2" onclick="joinPlayer(2)">JOIN</button>
         </div>
-        <!-- Row Player 4 -->
         <div class="input-row">
             <div class="input-accent" style="background: #f1c40f;"></div>
             <input type="text" id="inputP3" value="KUR AKA USOP">
@@ -149,14 +130,11 @@
         <button class="start-game-btn" id="startBtn" onclick="startGame()">MULAI BERLAYAR ⛵</button>
     </div>
 
-    <!-- ========================================================
-       2. TAMPILAN INTERFACE UTAMA PAPAN MONOPOLI
-       ======================================================== -->
+    <!-- UTAMA PAPAN INTERFACE -->
     <h1 id="gameTitle" style="display:none;">🏴‍☠️ GRAND LINE MONOPOLY - EDISI FINAL 🏴‍☠️</h1>
     <div class="game-interface" id="gameScreen">
         <div class="board-wrapper">
             <div class="board">
-                <!-- Baris Atas -->
                 <div class="tile corner" id="tile20">PARKIR BEBAS</div>
                 <div class="tile" id="tile21"><div class="color-bar c-red"></div>DRESSROSA<div class="tile-price">฿ 2.400</div></div>
                 <div class="tile" id="tile22">GACHA PETI</div>
@@ -169,8 +147,20 @@
                 <div class="tile" id="tile29"><div class="color-bar c-yellow"></div>GERMA 66<div class="tile-price">฿ 3.000</div></div>
                 <div class="tile corner" id="tile30">MASUK PENJARA</div>
 
-                <!-- Kolom Tengah (Kiri & Kanan) -->
                 <div class="tile" id="tile19"><div class="color-bar c-orange"></div>ALABASTA<div class="tile-price">฿ 2.200</div></div>
                 <div style="grid-column: span 9; border: none; background: transparent;"></div>
                 <div class="tile" id="tile31"><div class="color-bar c-green"></div>WANO KUNI<div class="tile-price">฿ 3.200</div></div>
 
+                <div class="tile" id="tile18"><div class="color-bar c-orange"></div>SANDORA<div class="tile-price">฿ 2.000</div></div>
+                <div style="grid-column: span 9; border: none; background: transparent;"></div>
+                <div class="tile" id="tile32"><div class="color-bar c-green"></div>ONIGASHIMA<div class="tile-price">฿ 3.200</div></div>
+
+                <div class="tile" id="tile17"><div class="color-bar c-orange"></div>RAINBASE<div class="tile-price">฿ 2.000</div></div>
+                <div style="grid-column: span 9; border: none; background: transparent;"></div>
+                <div class="tile" id="tile33">GACHA PETI</div>
+
+                <div class="tile" id="tile16">KERETA LAUT<div class="tile-price">฿ 2.000</div></div>
+                <div style="grid-column: span 9; border: none; background: transparent;"></div>
+                <div class="tile" id="tile34"><div class="color-bar c-green"></div>KURI<div class="tile-price">฿ 3.400</div></div>
+
+                <div class="tile" id="tile15"><div class="color-bar c-pink"></div>WATER 7<div class="tile-price">฿ 1.800</div></div>
