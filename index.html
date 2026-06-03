@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kode Buah - Edisi Spesial Saul & Robin</title>
+    <title>Generator Kode Buah - Edisi Final Saul & Robin</title>
     <style>
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -12,24 +12,27 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
+            /* Mengunci latar belakang gambar pilihan Anda */
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
             transition: background 0.3s ease;
-            overflow: hidden;
+            overflow: hidden; /* Mencegah layar bergeser akibat efek salju */
             position: relative;
         }
 
+        /* Wadah lapisan salju */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            pointer-events: none; /* Mengizinkan klik menembus lapisan salju */
             z-index: 10;
         }
 
+        /* Butiran salju */
         .snowflake {
             position: absolute;
             background: white;
@@ -39,7 +42,7 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Tampilan Default: Mode Terang (Putih Transparan) */
+        /* Tampilan Default Kartu: Mode Terang (Putih Transparan) */
         .card { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
@@ -52,14 +55,14 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 100;
+            z-index: 100; /* Wajib di atas salju agar tombol merespons sentuhan */
             transition: all 0.3s ease;
         }
 
-        /* Style Tambahan untuk MODE GELAP (Hitam Transparan) */
+        /* Desain Kartu saat MODE GELAP Aktif (Hitam Transparan) */
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
-            border-color: #f1c40f; 
+            border-color: #f1c40f; /* Bingkai berubah kuning emas bajak laut */
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
 
@@ -73,7 +76,6 @@
             border-color: #f1c40f;
         }
 
-        /* Style khusus untuk kotak quotes saul di mode gelap */
         .dark-mode .quote-container {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #f1c40f;
@@ -92,6 +94,7 @@
             transition: color 0.3s ease;
         }
 
+        /* Tombol Utama */
         button { 
             background-color: #e74c3c; 
             color: white; 
@@ -116,6 +119,7 @@
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
+        /* Tombol Pengubah Mode di Kanan Atas Kartu */
         .theme-toggle {
             position: absolute;
             top: 15px;
@@ -148,7 +152,7 @@
             transition: all 0.3s ease;
         }
 
-        /* Desain Elegan Kotak Quotes */
+        /* Kotak Quotes Mutiara Saul */
         .quote-container {
             margin-top: 25px;
             padding: 12px 15px;
@@ -186,9 +190,12 @@
 </head>
 <body>
 
+    <!-- Lapisan Salju -->
     <div id="snowflake-container"></div>
 
+    <!-- KOTAK UTAMA -->
     <div class="card">
+        <!-- Tombol Ganti Mode -->
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
@@ -199,7 +206,7 @@
         
         <div id="alert"></div>
 
-        <!-- KOTAK QUOTES SAUL TERPASANG DI SINI -->
+        <!-- Kotak Quotes Saul -->
         <div class="quote-container">
             <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
             <p class="quote-author">— Jaguar D. Saul</p>
@@ -207,7 +214,40 @@
     </div>
 
     <script>
-        // Logika Salju
+        // --- 1. LOGIKA EFEK SUARA PREMIUM (AUDIO SYNTHESIZER BROWSER) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Efek Suara Petir Elektrik (Tombol Acak)
+        function playLightningSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        // Efek Suara Dentingan Lonceng Sukses (Tombol Salin)
+        function playChimeSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+
+
+        // --- 2. LOGIKA UTAMA EFEK LIVE SALJU BERGUGURAN ---
         const container = document.getElementById('snowflake-container');
         const maxSnowflakes = 40;
 
@@ -223,7 +263,6 @@
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `-10px`;
 
-            const duration = Math.random() * 5 + 5;
             container.appendChild(snowflake);
 
             let topPos = -10;
@@ -246,8 +285,10 @@
 
         setInterval(createSnowflake, 300);
 
-        // Logika Tema
+
+        // --- 3. LOGIKA FITUR DARK/LIGHT MODE ---
         function toggleTheme() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
             
@@ -260,46 +301,6 @@
             }
         }
 
-        // Logika Generator
+
+        // --- 4. LOGIKA KODE ACAK GENERATOR BUAH ---
         const fruits = [
-            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
-            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
-        ];
-
-        function generateFruitNumberCode() {
-            const randomIndex = Math.floor(Math.random() * fruits.length);
-            let result = fruits[randomIndex];
-            
-            if (result.length > 6) {
-                result = result.substring(0, 5);
-            }
-            
-            while (result.length < 8) {
-                const randomDigit = Math.floor(Math.random() * 10);
-                result += randomDigit;
-            }
-            
-            const display = document.getElementById("nameDisplay");
-            display.innerText = result;
-            display.classList.remove("animate-text");
-            void display.offsetWidth; 
-            display.classList.add("animate-text");
-            
-            document.getElementById("alert").innerText = ""; 
-        }
-
-        function copyCode() {
-            const codeText = document.getElementById("nameDisplay").innerText;
-            if (codeText === 'klik tombol di bawah') return;
-            
-            navigator.clipboard.writeText(codeText).then(() => {
-                const alertDiv = document.getElementById("alert");
-                alertDiv.innerText = "✓ Kode berhasil disalin!";
-                setTimeout(() => { alertDiv.innerText = ""; }, 2000);
-            }).catch(err => {
-                alert("Gagal menyalin teks");
-            });
-        }
-    </script>
-</body>
-</html>
