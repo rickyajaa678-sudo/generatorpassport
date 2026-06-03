@@ -3,232 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerbang Pemanggilan Naga Shenron 3D</title>
+    <title>One Piece Grand Line Monopoly (4 Players)</title>
     <style>
         * { box-sizing: border-box; }
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to bottom, #111e25, #080c10);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 1s ease;
-            perspective: 1000px;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 10px;
+            background: #111e25; color: #fff;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+        h1 { margin: 5px 0; font-size: 20px; color: #f1c40f; text-align: center; }
+
+        /* KONTROLLER GAME & PANEL STATUS PEMAIN */
+        .game-container {
+            display: flex; flex-direction: column; width: 100%; max-width: 800px; gap: 10px;
+        }
+        @media(min-width: 750px) {
+            .game-container { flex-direction: row; align-items: flex-start; }
         }
 
-        /* EFEK BADAI PETIR (DENGAN ANIMASI SKRAP KILAT) */
-        .sky-storm {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; opacity: 0; pointer-events: none; z-index: 1;
+        .panel {
+            background: rgba(255, 255, 255, 0.05); padding: 15px;
+            border-radius: 12px; border: 2px solid #e67e22; flex: 1;
         }
-        @keyframes lightningFlash {
-            0%, 90%, 94%, 98%, 100% { background: #000; }
-            92%, 96% { background: #fff; }
+        .player-status {
+            padding: 8px; margin: 4px 0; border-radius: 6px;
+            display: flex; justify-content: space-between; font-weight: bold; font-size: 13px;
         }
-        .active-storm {
-            opacity: 1;
-            animation: lightningFlash 4s infinite;
-        }
+        .p1-box { background: #e74c3c; color: white; }
+        .p2-box { background: #3498db; color: white; }
+        .p3-box { background: #2ecc71; color: white; }
+        .p4-box { background: #f1c40f; color: black; }
+        .active-turn { border: 3px solid #fff; box-shadow: 0 0 10px #fff; }
 
-        /* ========================================================
-           NAGA SHENRON 3D (DESAIN KODE CSS STRUKTUR)
-           ======================================================== */
-        .shenron-container {
-            position: absolute; width: 300px; height: 300px;
-            z-index: 5; display: none; transform-style: preserve-3d;
-            animation: floatDragon 4s ease-in-out infinite alternate;
-        }
-        @keyframes floatDragon {
-            0% { transform: translateY(20px) rotateX(10deg) rotateY(10deg); }
-            100% { transform: translateY(-20px) rotateX(-5deg) rotateY(-10deg); }
-        }
-
-        /* Badan Naga Meliuk-Liuk */
-        .dragon-body {
-            position: absolute; width: 260px; height: 260px;
-            border: 35px solid #2ecc71; border-radius: 50%;
-            border-bottom-color: #f1c40f; /* Perut kuning naga */
-            border-left-color: #27ae60;
-            filter: drop-shadow(0 0 30px rgba(46,204,113,0.6));
-        }
-
-        /* Kepala Naga */
-        .dragon-head {
-            position: absolute; top: -20px; left: 100px;
-            width: 70px; height: 50px; background: #27ae60;
-            border-radius: 20px 40px 10px 10px;
-            border-bottom: 10px solid #f1c40f;
-        }
-        /* Mata Merah Menyala Shenron */
-        .dragon-head::before, .dragon-head::after {
-            content: ""; position: absolute; top: 12px;
-            width: 10px; height: 10px; background: #e74c3c;
-            border-radius: 50%; box-shadow: 0 0 15px #e74c3c;
-        }
-        .dragon-head::before { left: 15px; }
-        .dragon-head::after { left: 40px; }
-
-        /* Antena Emas Panjang */
-        .horns {
-            position: absolute; top: -35px; left: 15px;
-            width: 40px; height: 40px; border: 6px solid #f1c40f;
-            border-bottom: none; border-left: none; transform: rotate(-30deg);
-        }
-
-        /* ========================================================
-           7 DRAGON BALLS (BOLA NAGA)
-           ======================================================== */
-        .altar {
-            display: flex; gap: 15px; z-index: 10; margin-top: 150px;
-            transition: all 1s ease;
-        }
-        .dragon-ball {
-            width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #ff9f43, #ee5253);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            color: #fff; font-weight: bold; font-size: 18px;
-            box-shadow: 0 4px 15px rgba(238,82,83,0.5), inset -5px -5px 10px rgba(0,0,0,0.3);
-            text-shadow: 0 0 5px #fff; cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .dragon-ball:hover { transform: scale(1.2) translateY(-10px); box-shadow: 0 0 25px #ff9f43; }
-
-        /* Animasi Bola Berkumpul saat Dipanggil */
-        .balls-gather {
-            transform: scale(0.2) translate(0, -400px) !important;
-            opacity: 0.5;
-            box-shadow: 0 0 50px #ff9f43 !important;
-        }
-
-        /* ========================================================
-           KOTAK PERMINTAAN GAIB (WISH PANEL)
-           ======================================================== */
-        .wish-box {
-            background: rgba(255, 255, 255, 0.92); padding: 25px;
-            border-radius: 16px; border: 4px solid #f1c40f;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            text-align: center; max-width: 380px; width: 90%;
-            position: absolute; z-index: 20; display: none;
-            animation: popWish 0.5s ease forwards;
-        }
-        @keyframes popWish { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .wish-box h2 { color: #2c3e50; font-size: 20px; margin-top: 0; }
-        .wish-box input {
-            width: 100%; padding: 10px; border: 2px solid #ccc;
-            border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 12px;
-            text-align: center;
-        }
-        .wish-box button {
-            background: #2ecc71; color: white; border: none; padding: 10px 20px;
+        /* BUTTONS & DICE DISPLAY */
+        .control-box { text-align: center; margin-top: 10px; }
+        button {
+            background: #e67e22; color: white; border: none; padding: 10px 20px;
             font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin: 5px;
         }
-        .wish-box button:hover { background: #27ae60; }
-
-        #codeDisplay {
-            font-size: 24px; font-weight: bold; color: #ee5253;
-            margin: 15px 0 5px 0; letter-spacing: 2px; display: none;
-            background: #fdf6e2; padding: 8px; border-radius: 6px; border: 1px dashed #ee5253;
+        button:hover { background: #d35400; }
+        button:disabled { background: #7f8c8d; cursor: not-allowed; }
+        .dice-view {
+            font-size: 24px; font-weight: bold; color: #f1c40f; margin: 5px 0;
         }
 
-        /* Tombol Panggil Utama */
-        .summon-btn {
-            z-index: 10; background: #ee5253; color: white; border: 4px solid #f1c40f;
-            padding: 15px 35px; font-size: 16px; font-weight: bold; border-radius: 50px;
-            cursor: pointer; margin-top: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            transition: all 0.2s;
+        /* ========================================================
+           PAPAN MONOPOLI (CSS GRID RAKSASA 11x11 PETAK)
+           ======================================================== */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            grid-template-rows: repeat(11, 1fr);
+            width: 100%; max-width: 480px; aspect-ratio: 1/1;
+            background: #fdf6e2; border: 4px solid #1c140e;
+            border-radius: 8px; margin: 0 auto;
         }
-        .summon-btn:hover { background: #ff9f43; transform: scale(1.05); }
 
-        #statusText {
-            z-index: 10; color: #f1c40f; font-weight: bold; font-size: 15px;
-            margin-top: 20px; letter-spacing: 1px; text-shadow: 0 2px 4px #000;
+        .tile {
+            border: 1px solid #1c140e; display: flex; flex-direction: column;
+            justify-content: space-between; align-items: center; padding: 2px;
+            font-size: 7px; font-weight: bold; color: #1c140e; text-align: center;
+            position: relative; overflow: hidden;
+        }
+
+        /* Mewarnai Sudut Papan */
+        .corner { background: #dcd1b4; font-size: 8px; font-weight: 900; justify-content: center; }
+
+        /* Pewarnaan Kompleks Tanah Properti */
+        .color-bar { width: 100%; height: 6px; margin-bottom: 2px; }
+        .c-brown { background: #8b5a2b; }
+        .c-cyan { background: #87ceeb; }
+        .c-pink { background: #ff69b4; }
+        .c-orange { background: #ffa500; }
+        .c-red { background: #ff0000; }
+        .c-yellow { background: #ffff00; }
+        .c-green { background: #008000; }
+        .c-blue { background: #0000ff; }
+
+        /* WADAH PION PEMAIN DI DALAM PETAK */
+        .pion-container {
+            display: flex; gap: 2px; justify-content: center; align-items: center;
+            flex-wrap: wrap; width: 100%; margin-top: auto;
+        }
+        .pion {
+            width: 10px; height: 10px; border-radius: 50%;
+            border: 1px solid #fff; display: inline-block;
+        }
+        .p1-pion { background: #e74c3c; }
+        .p2-pion { background: #3498db; }
+        .p3-pion { background: #2ecc71; }
+        .p4-pion { background: #f1c40f; }
+
+        /* LOG NOTIFIKASI AKTIVITAS GAME */
+        #gameLog {
+            height: 90px; overflow-y: auto; background: rgba(0,0,0,0.5);
+            padding: 8px; border-radius: 6px; font-size: 11px;
+            border: 1px solid #7f8c8d; text-align: left; margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Efek Badai Petir -->
-    <div class="sky-storm" id="stormBg"></div>
+    <h1>🏴‍☠️ GRAND LINE MONOPOLY 🏴‍☠️</h1>
 
-    <!-- Naga Shenron 3D -->
-    <div class="shenron-container" id="shenron">
-        <div class="dragon-body"></div>
-        <div class="dragon-head">
-            <div class="horns"></div>
+    <div class="game-container">
+        <!-- Papan Grid Monopoli -->
+        <div class="board" id="monopolyBoard">
+            <!-- Baris 1 (Atas: Kiri ke Kanan) -->
+            <div class="tile corner" id="tile20">PARKIR</div>
+            <div class="tile" id="tile21"><div class="color-bar c-red"></div>DRESSROSA</div>
+            <div class="tile" id="tile22">GACHA</div>
+            <div class="tile" id="tile23"><div class="color-bar c-red"></div>GREEN BIT</div>
+            <div class="tile" id="tile24"><div class="color-bar c-red"></div>PROVENCE</div>
+            <div class="tile" id="tile25">LAUTAN</div>
+            <div class="tile" id="tile26"><div class="color-bar c-yellow"></div>ZOU</div>
+            <div class="tile" id="tile27"><div class="color-bar c-yellow"></div>WHOLE CAKE</div>
+            <div class="tile" id="tile28">POMPA</div>
+            <div class="tile" id="tile29"><div class="color-bar c-yellow"></div>GERMA 66</div>
+            <div class="tile corner" id="tile30">PENJARA</div>
+
+            <!-- Baris 2 sampai 10 (Sisi Kiri & Kanan Tengah) -->
+            <!-- Baris 2 -->
+            <div class="tile" id="tile19"><div class="color-bar c-orange"></div>ALABASTA</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile31"><div class="color-bar c-green"></div>WANO KUNI</div>
+            <!-- Baris 3 -->
+            <div class="tile" id="tile18"><div class="color-bar c-orange"></div>SANDORA</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile32"><div class="color-bar c-green"></div>ONIGASHIMA</div>
+            <!-- Baris 4 -->
+            <div class="tile" id="tile17"><div class="color-bar c-orange"></div>RAINBASE</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile33">GACHA</div>
+            <!-- Baris 5 -->
+            <div class="tile" id="tile16">KERETA</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile34"><div class="color-bar c-green"></div>KURI</div>
+            <!-- Baris 6 -->
+            <div class="tile" id="tile15"><div class="color-bar c-pink"></div>WATER 7</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile35">KAPAL</div>
+            <!-- Baris 7 -->
+            <div class="tile" id="tile14"><div class="color-bar c-pink"></div>ENIES LOBBY</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile36">GACHA</div>
+            <!-- Baris 8 -->
+            <div class="tile" id="tile13">LISTRIK</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile37"><div class="color-bar c-blue"></div>EGGHEAD</div>
+            <!-- Baris 9 -->
+            <div class="tile" id="tile12"><div class="color-bar c-pink"></div>PUNK HAZARD</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile38">PAJAK</div>
+            <!-- Baris 10 -->
+            <div class="tile" id="tile11"><div class="color-bar c-cyan"></div>SKYPIEA</div>
+            <div class="tile" style="grid-column: span 9; border: none; background: transparent;"></div>
+            <div class="tile" id="tile39"><div class="color-bar c-blue"></div>ELBAF</div>
+
+            <!-- Baris 11 (Bawah: Kiri ke Kanan) -->
+            <div class="tile corner" id="tile10">KUNJUNGI</div>
+            <div class="tile" id="tile9"><div class="color-bar c-cyan"></div>JAYA ID</div>
+            <div class="tile" id="tile8"><div class="color-bar c-cyan"></div>CONOMI</div>
+            <div class="tile" id="tile7">GACHA</div>
+            <div class="tile" id="tile6"><div class="color-bar c-brown"></div>SYRUP</div>
+            <div class="tile" id="tile5">BANDARA</div>
+            <div class="tile" id="tile4">PAJAK</div>
+            <div class="tile" id="tile3"><div class="color-bar c-brown"></div>ORANGE</div>
+            <div class="tile" id="tile2">GACHA</div>
+            <div class="tile" id="tile1"><div class="color-bar c-brown"></div>FUUSHA</div>
+            <div class="tile corner" id="tile0">START</div>
         </div>
-    </div>
 
-    <!-- Altar Tempat 7 Dragon Ball -->
-    <div class="altar" id="ballAltar">
-        <div class="dragon-ball">⭐</div>
-        <div class="dragon-ball">⭐⭐</div>
-        <div class="dragon-ball">⭐⭐⭐</div>
-        <div class="dragon-ball">⭐⭐⭐⭐</div>
-        <div class="dragon-ball">5⭐</div>
-        <div class="dragon-ball">6⭐</div>
-        <div class="dragon-ball">7⭐</div>
-    </div>
+        <!-- Panel Info Pemain & Tombol Kontrol -->
+        <div class="panel">
+            <h3>KONDISI KREWS</h3>
+            <div class="player-status p1-box active-turn" id="pBox0">🏴‍☠️ Player 1 (Luffy) <span id="pMoney0">฿ 15,000M</span></div>
+            <div class="player-status p2-box" id="pBox1">⚔️ Player 2 (Zoro) <span id="pMoney1">฿ 15,000M</span></div>
+            <div class="player-status p3-box" id="pBox2">🍊 Player 3 (Nami) <span id="pMoney2">฿ 15,000M</span></div>
+            <div class="player-status p4-box" id="pBox3">🚬 Player 4 (Sanji) <span id="pMoney3">฿ 15,000M</span></div>
 
-    <div id="statusText">7 BOLA NAGA SUDAH TERKUMPUL DI ALTAR</div>
-
-    <button class="summon-btn" id="summonBtn" onclick="summonShenron()">PANGGIL SHENRON!</button>
-
-    <!-- Kotak Pengabul Permintaan -->
-    <div class="wish-box" id="wishBox">
-        <h2>🐉 SEBUTKAN PERMINTAANMU!</h2>
-        <p style="font-size: 13px; color: #7f8c8d; margin-bottom: 15px;">Shenron akan mengabulkannya dalam bentuk kode gaib 8 digit.</p>
-        <input type="text" id="wishInput" placeholder="Ketik permintaanmu di sini...">
-        <button onclick="grantWish()">KABULKAN!</button>
-        <div id="codeDisplay">-------</div>
-    </div>
-
-    <script>
-        // --- LOGIKA AUDIO SYNTHESIZER: SUARA GEMURUH BADAI ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playThunderSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(100, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 1.5);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.5);
-        }
-
-        // --- 1. PROSES PEMANGGILAN NAGA SHENRON ---
-        function summonShenron() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            playThunderSound();
-
-            document.getElementById('summonBtn').style.display = 'none';
-            document.getElementById('statusText').innerText = "MEMANGGIL SHENRON... LANGIT MENJADI GELAP!";
-            document.body.style.background = "#05070a";
-
-            // Efek Badai Kilat Aktif
-            document.getElementById('stormBg').classList.add('active-storm');
-
-            // Bola naga menyatu berkumpul ke tengah langit
-            const balls = document.querySelectorAll('.dragon-ball');
-            balls.forEach(ball => {
-                ball.classList.add('balls-gather');
-            });
-
-            // Setelah 2 detik, Naga Shenron 3D keluar
-            setTimeout(() => {
-                document.getElementById('ballAltar').style.display = 'none';
-                document.getElementById('shenron').style.display = 'block';
-                document.getElementById('statusText').innerText = "SHENRON: SEBUTKAN PERMINTAANMU, AKAN KUKABULKAN SATU!";
-                
-                // Munculkan kotak pengabul keinginan
-                setTimeout(() => {
-                    document.getElementById('wishBox').style.display = 'block';
-                }, 1000);
-            }, 2000);
-        }
-
+            <div class="control-box">
+                <div class="dice-view" id="diceResult">🎲 -</div>
+                <button id="rollBtn" onclick="rollDice()">KOCOK DADU</button>
+                <button id="buyBtn" onclick="buyProperty()" disabled>BELI PULAU</button>
