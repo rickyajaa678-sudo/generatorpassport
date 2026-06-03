@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Nama Acak</title>
+    <title>Generator Kode Acak 8 Digit</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
@@ -11,40 +11,49 @@
         button:hover { background-color: #0056b3; }
         .copy-btn { background-color: #28a745; }
         .copy-btn:hover { background-color: #218838; }
-        #nameDisplay { font-size: 24px; font-weight: bold; margin: 20px 0; min-height: 35px; color: #333; padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ccc; }
+        #nameDisplay { font-size: 24px; font-weight: bold; margin: 20px 0; min-height: 35px; color: #333; padding: 10px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ccc; letter-spacing: 2px; }
         #alert { color: #28a745; font-size: 14px; height: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Generator Nama Acak</h2>
+        <h2>Generator Kode Acak</h2>
+        <!-- Tempat kode muncul -->
         <div id="nameDisplay">Klik tombol di bawah</div>
-        <button onclick="generateName()">Acak Nama</button>
-        <button class="copy-btn" onclick="copyName()">Salin Nama</button>
+        
+        <!-- Tombol Aksi -->
+        <button onclick="generateCode()">Acak Kode</button>
+        <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+        
+        <!-- Notifikasi Salin -->
         <div id="alert"></div>
     </div>
 
     <script>
-        const names = [
-            "Budi Santoso", "Siti Aminah", "Ahmad Hidayat", "Dewi Lestari", 
-            "Rian Wijaya", "Putri Utami", "Eko Prasetyo", "Mega Tiara", 
-            "Fajar Nugroho", "Anisa Rahma", "Kevin Sanjaya", "Jessica Mila"
-        ];
-
-        function generateName() {
-            const randomIndex = Math.floor(Math.random() * names.length);
-            document.getElementById("nameDisplay").innerText = names[randomIndex];
-            document.getElementById("alert").innerText = "";
+        // Fungsi untuk membuat kombinasi huruf besar, huruf kecil, dan angka sepanjang 8 karakter
+        function generateCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const length = 8; // Mengunci panjang karakter hanya 8 digit
+            
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                result += characters.charAt(randomIndex);
+            }
+            
+            document.getElementById("nameDisplay").innerText = result;
+            document.getElementById("alert").innerText = ""; // Reset notifikasi
         }
 
-        function copyName() {
-            const nameText = document.getElementById("nameDisplay").innerText;
-            if (nameText === 'Klik tombol di bawah') return;
+        // Fungsi untuk menyalin kode ke clipboard
+        function copyCode() {
+            const codeText = document.getElementById("nameDisplay").innerText;
+            if (codeText === 'Klik tombol di bawah') return;
             
-            navigator.clipboard.writeText(nameText).then(() => {
+            navigator.clipboard.writeText(codeText).then(() => {
                 const alertDiv = document.getElementById("alert");
-                alertDiv.innerText = "✓ Nama berhasil disalin!";
+                alertDiv.innerText = "✓ Kode berhasil disalin!";
                 setTimeout(() => { alertDiv.innerText = ""; }, 2000);
             }).catch(err => {
                 alert("Gagal menyalin teks");
