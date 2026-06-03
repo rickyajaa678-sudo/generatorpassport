@@ -12,27 +12,25 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* Mengunci latar belakang gambar pilihan Anda */
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
             transition: background 0.3s ease;
-            overflow: hidden; /* Mencegah layar bergeser akibat efek salju */
+            overflow: hidden;
             position: relative;
         }
 
-        /* Wadah lapisan salju */
+        /* PERBAIKAN: Salju dipindahkan ke lapisan paling belakang agar tidak menghalangi tombol */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Mengizinkan klik menembus lapisan salju */
-            z-index: 10;
+            pointer-events: none !important;
+            z-index: 1 !important;
         }
 
-        /* Butiran salju */
         .snowflake {
             position: absolute;
             background: white;
@@ -42,7 +40,7 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Tampilan Default Kartu: Mode Terang (Putih Transparan) */
+        /* Kartu generator ditaruh di depan lapisan salju */
         .card { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
@@ -55,35 +53,21 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 100; /* Wajib di atas salju agar tombol merespons sentuhan */
+            z-index: 9999 !important; /* Lapisan paling depan */
+            pointer-events: auto !important;
             transition: all 0.3s ease;
         }
 
-        /* Desain Kartu saat MODE GELAP Aktif (Hitam Transparan) */
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
-            border-color: #f1c40f; /* Bingkai berubah kuning emas bajak laut */
+            border-color: #f1c40f; 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
 
-        .dark-mode h2 {
-            color: #f1c40f !important;
-        }
-
-        .dark-mode #nameDisplay {
-            background: #2c3e50;
-            color: #f1c40f;
-            border-color: #f1c40f;
-        }
-
-        .dark-mode .quote-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid #f1c40f;
-            color: #ddd;
-        }
-        .dark-mode .quote-author {
-            color: #f1c40f;
-        }
+        .dark-mode h2 { color: #f1c40f !important; }
+        .dark-mode #nameDisplay { background: #2c3e50; color: #f1c40f; border-color: #f1c40f; }
+        .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #ddd; }
+        .dark-mode .quote-author { color: #f1c40f; }
 
         h2 {
             color: #2c3e50; 
@@ -94,7 +78,6 @@
             transition: color 0.3s ease;
         }
 
-        /* Tombol Utama */
         button { 
             background-color: #e74c3c; 
             color: white; 
@@ -107,19 +90,16 @@
             transition: all 0.2s ease; 
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10000 !important;
+            pointer-events: auto !important;
         }
-        button:hover { 
-            background-color: #c0392b; 
-            transform: translateY(-2px); 
-        }
-        button:active {
-            transform: scale(0.95); 
-        }
+        button:hover { background-color: #c0392b; transform: translateY(-2px); }
+        button:active { transform: scale(0.95); }
 
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Tombol Pengubah Mode di Kanan Atas Kartu */
         .theme-toggle {
             position: absolute;
             top: 15px;
@@ -131,12 +111,10 @@
             padding: 0;
             margin: 0;
             box-shadow: none;
+            z-index: 10001 !important;
             transition: transform 0.2s ease;
         }
-        .theme-toggle:hover {
-            transform: scale(1.2);
-            background: none;
-        }
+        .theme-toggle:hover { transform: scale(1.2); background: none; }
 
         #nameDisplay { 
             font-size: 26px; 
@@ -152,7 +130,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Kotak Quotes Mutiara Saul */
         .quote-container {
             margin-top: 25px;
             padding: 12px 15px;
@@ -162,40 +139,19 @@
             text-align: left;
             transition: all 0.3s ease;
         }
-        .quote-text {
-            font-style: italic;
-            font-size: 14.5px;
-            line-height: 1.5;
-            color: #555;
-            margin: 0 0 6px 0;
-        }
-        .quote-author {
-            font-size: 12px;
-            font-weight: bold;
-            color: #e67e22;
-            text-align: right;
-            margin: 0;
-        }
+        .quote-text { font-style: italic; font-size: 14.5px; line-height: 1.5; color: #555; margin: 0 0 6px 0; }
+        .quote-author { font-size: 12px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .animate-text {
-            animation: fadeIn 0.2s ease forwards;
-        }
-
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .animate-text { animation: fadeIn 0.2s ease forwards; }
         #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- Lapisan Salju -->
     <div id="snowflake-container"></div>
 
-    <!-- KOTAK UTAMA -->
     <div class="card">
-        <!-- Tombol Ganti Mode -->
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
@@ -206,7 +162,6 @@
         
         <div id="alert"></div>
 
-        <!-- Kotak Quotes Saul -->
         <div class="quote-container">
             <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
             <p class="quote-author">— Jaguar D. Saul</p>
@@ -214,10 +169,9 @@
     </div>
 
     <script>
-        // --- 1. LOGIKA EFEK SUARA PREMIUM (AUDIO SYNTHESIZER BROWSER) ---
+        // --- LOGIKA EFEK SUARA BAWAAN BROWSER ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Efek Suara Petir Elektrik (Tombol Acak)
         function playLightningSound() {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -232,7 +186,6 @@
             osc.stop(audioCtx.currentTime + 0.3);
         }
 
-        // Efek Suara Dentingan Lonceng Sukses (Tombol Salin)
         function playChimeSound() {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -246,8 +199,7 @@
             osc.stop(audioCtx.currentTime + 0.4);
         }
 
-
-        // --- 2. LOGIKA UTAMA EFEK LIVE SALJU BERGUGURAN ---
+        // Logika Salju
         const container = document.getElementById('snowflake-container');
         const maxSnowflakes = 40;
 
@@ -285,22 +237,44 @@
 
         setInterval(createSnowflake, 300);
 
-
-        // --- 3. LOGIKA FITUR DARK/LIGHT MODE ---
+        // Logika Tema
         function toggleTheme() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
-            
             body.classList.toggle("dark-mode");
-            
-            if (body.classList.contains("dark-mode")) {
-                themeBtn.innerText = "☀️";
-            } else {
-                themeBtn.innerText = "🌙";
-            }
+            themeBtn.innerText = body.classList.contains("dark-mode") ? "☀️" : "🌙";
         }
 
-
-        // --- 4. LOGIKA KODE ACAK GENERATOR BUAH ---
+        // Logika Generator
         const fruits = [
+            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
+            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
+        ];
+
+        function generateFruitNumberCode() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            playLightningSound();
+
+            const randomIndex = Math.floor(Math.random() * fruits.length);
+            let result = fruits[randomIndex];
+            
+            if (result.length > 6) {
+                result = result.substring(0, 5);
+            }
+            
+            while (result.length < 8) {
+                const randomDigit = Math.floor(Math.random() * 10);
+                result += randomDigit;
+            }
+            
+            const display = document.getElementById("nameDisplay");
+            display.innerText = result;
+            display.classList.remove("animate-text");
+            void display.offsetWidth; 
+            display.classList.add("animate-text");
+            document.getElementById("alert").innerText = ""; 
+        }
+
+        function copyCode() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
