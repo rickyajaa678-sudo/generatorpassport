@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kode Buah - Edisi Spesial</title>
+    <title>Generator Kode Buah - Edisi Spesial Saul & Robin</title>
     <style>
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -16,11 +16,34 @@
             background-size: cover;
             background-color: #1c2e4a; 
             transition: background 0.3s ease;
+            overflow: hidden; /* Mengunci layar agar tidak bisa di-scroll akibat salju */
+            position: relative;
+        }
+
+        /* Tempat menampung butiran salju agar tidak menutupi tombol klik */
+        #snowflake-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Penting! Agar jari/kursor mouse bisa menembus salju untuk klik tombol */
+            z-index: 10;
+        }
+
+        /* Bentuk butiran salju */
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.8;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
         /* Tampilan Default: Mode Terang (Putih Transparan) */
         .card { 
-            background: rgba(255, 255, 255, 0.88); 
+            background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
             padding: 30px; 
@@ -31,13 +54,14 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
+            z-index: 100; /* Berada di atas lapisan salju agar selalu bisa diklik */
             transition: all 0.3s ease;
         }
 
         /* Style Tambahan untuk MODE GELAP (Hitam Transparan) */
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
-            border-color: #f1c40f; /* Ganti bingkai jadi kuning emas bajak laut */
+            border-color: #f1c40f; 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
 
@@ -85,7 +109,7 @@
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Tombol Switch Dark/Light Mode di Pojok Atas Kartu */
+        /* Tombol Switch Dark/Light Mode */
         .theme-toggle {
             position: absolute;
             top: 15px;
@@ -131,8 +155,11 @@
 </head>
 <body>
 
+    <!-- Wadah khusus efek salju jatuh -->
+    <div id="snowflake-container"></div>
+
+    <!-- KOTAK GENERATOR UTAMA -->
     <div class="card">
-        <!-- Tombol Ikon Bulan / Matahari -->
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
@@ -145,7 +172,55 @@
     </div>
 
     <script>
-        // Fungsi Mengubah Mode Gelap / Terang
+        // --- 1. LOGIKA UTAMA EFEK SALJU BERGUGURAN ---
+        const container = document.getElementById('snowflake-container');
+        const maxSnowflakes = 40; // Batas jumlah butiran salju di layar agar super ringan
+
+        function createSnowflake() {
+            if (container.children.length >= maxSnowflakes) return;
+
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            // Ukuran acak butiran salju (antara 2px sampai 6px)
+            const size = Math.random() * 4 + 2;
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+
+            // Posisi kiri awal acak (0% - 100% lebar layar)
+            snowflake.style.left = `${Math.random() * 100}%`;
+            snowflake.style.top = `-10px`;
+
+            // Kecepatan jatuh acak
+            const duration = Math.random() * 5 + 5; // 5 sampai 10 detik
+            
+            container.appendChild(snowflake);
+
+            // Pergerakan animasi turun menggunakan sistem interval koordinat ringan
+            let topPos = -10;
+            let leftPos = parseFloat(snowflake.style.left);
+            const drift = Math.random() * 0.4 - 0.2; // Efek tertiup angin ke kanan/kiri sedikit
+
+            const fallInterval = setInterval(() => {
+                topPos += Math.random() * 1 + 0.5; // Kecepatan meluncur ke bawah
+                leftPos += drift;
+
+                snowflake.style.top = `${topPos}px`;
+                snowflake.style.left = `${leftPos}%`;
+
+                // Jika salju sudah melewati bagian bawah layar, hapus untuk hemat memori
+                if (topPos > window.innerHeight) {
+                    clearInterval(fallInterval);
+                    snowflake.remove();
+                }
+            }, 20);
+        }
+
+        // Jalankan pembuatan butiran salju secara bertahap setiap 300 milidetik
+        setInterval(createSnowflake, 300);
+
+
+        // --- 2. LOGIKA FITUR DARK/LIGHT MODE ---
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
@@ -153,13 +228,13 @@
             body.classList.toggle("dark-mode");
             
             if (body.classList.contains("dark-mode")) {
-                themeBtn.innerText = "☀️"; // Berubah jadi matahari jika mode gelap aktif
+                themeBtn.innerText = "☀️";
             } else {
-                themeBtn.innerText = "🌙"; // Berubah jadi bulan jika mode terang aktif
+                themeBtn.innerText = "🌙";
             }
         }
 
-        // Logika Generator Buah
+        // --- 3. LOGIKA GENERATOR KODE BUAH ---
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
