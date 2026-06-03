@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Straw Hat Code</title>
+    <title>Generator Kode Buah - Edisi Sunny Go</title>
     <style>
-        /* Animasi bergerak untuk latar belakang gradasi */
-        @keyframes gradientMove {
+        /* Animasi Live Wallpaper: Efek ombak/awan bergerak di laut */
+        @keyframes oceanMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -19,23 +19,32 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* Latar belakang gradasi bergerak bertema petualangan laut */
-            background: linear-gradient(-45deg, #e67e22, #f1c40f, #3498db, #2980b9);
+            /* Warna Gradasi Live Wallpaper bertema Laut & Bendera Topi Jerami (Biru Laut, Hitam, Oranye Sunny) */
+            background: linear-gradient(-45deg, #1abc9c, #2980b9, #2c3e50, #e67e22);
             background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
+            animation: oceanMove 15s ease infinite;
         }
 
+        /* Kartu utama dengan nuansa Thousand Sunny (Kuning Emas & Putih) */
         .card { 
-            background: rgba(255, 255, 255, 0.95); 
+            background: rgba(255, 255, 255, 0.93); 
             padding: 30px; 
-            border-radius: 16px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             text-align: center; 
             max-width: 400px; 
             width: 100%; 
+            border: 4px solid #f1c40f; /* Warna kuning khas kepala Sunny Go */
         }
 
-        /* Tombol dengan efek animasi membal (scale) saat diklik */
+        h2 {
+            color: #2c3e50; 
+            margin-top: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        /* Tombol Utama warna Oranye khas rambut Luffy / Singa Sunny Go dengan efek membal */
         button { 
             background-color: #e67e22; 
             color: white; 
@@ -47,39 +56,41 @@
             margin: 10px; 
             transition: all 0.2s ease; 
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
         }
         button:hover { 
             background-color: #d35400; 
-            transform: translateY(-2px); /* Tombol sedikit naik saat disentuh */
+            transform: translateY(-2px); 
         }
         button:active {
-            transform: scale(0.95); /* Efek membal mendelep saat diklik */
+            transform: scale(0.95); 
         }
 
+        /* Tombol Salin warna Hijau khas Zoro */
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Animasi fade-in halus untuk teks kode saat berganti */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
+        /* Bingkai tampilan kode bertema kayu kapal bajak laut */
         #nameDisplay { 
             font-size: 24px; 
             font-weight: bold; 
             margin: 20px 0; 
             min-height: 35px; 
-            color: #2c3e50; 
+            color: #d35400; 
             padding: 12px; 
-            background: #f8f9fa; 
+            background: #fdf6e2; 
             border-radius: 8px; 
             border: 2px dashed #e67e22; 
             letter-spacing: 2px; 
         }
+
+        /* Animasi teks muncul memudar */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
         .animate-text {
-            animation: fadeIn 0.3s ease forwards;
+            animation: fadeIn 0.2s ease forwards;
         }
 
         #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; }
@@ -88,12 +99,12 @@
 <body>
 
     <div class="card">
-        <h2 style="color: #2c3e50; margin-top: 0;">Straw Hat Generator</h2>
-        <!-- Tempat teks muncul -->
+        <h2>🍊 Generator Kode Buah 🏴‍☠️</h2>
+        <!-- Tempat teks kode buah muncul -->
         <div id="nameDisplay">klik tombol di bawah</div>
         
         <!-- Tombol Aksi -->
-        <button onclick="generateOnePieceCode()">Acak Kode</button>
+        <button onclick="generateFruitNumberCode()">Acak Kode</button>
         <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
         
         <!-- Notifikasi Salin -->
@@ -101,33 +112,33 @@
     </div>
 
     <script>
-        // Daftar nama bertema Sunny Go dan Kru Topi Jerami (huruf kecil semua)
-        const strawHats = [
-            "luffy", "zoro", "nami", "usopp", "sanji", "chopper", 
-            "robin", "franky", "brook", "jinbe", "sunnygo"
+        // KODE TETAP BUAH-BUAHAN SEPERTI PERMINTAAN ANDA
+        const fruits = [
+            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
+            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
         ];
 
-        function generateOnePieceCode() {
-            // 1. Pilih nama secara acak
-            const randomIndex = Math.floor(Math.random() * strawHats.length);
-            let result = strawHats[randomIndex];
+        function generateFruitNumberCode() {
+            // 1. Pilih nama buah secara acak
+            const randomIndex = Math.floor(Math.random() * fruits.length);
+            let result = fruits[randomIndex];
             
-            // 2. Jika nama kepanjangan (lebih dari 6 karakter), potong sedikit agar muat angka
+            // 2. Potong jika nama buah kepanjangan agar muat sisa angka
             if (result.length > 6) {
                 result = result.substring(0, 5);
             }
             
-            // 3. Tambahkan angka acak di belakangnya hingga total panjang tepat 8 karakter
+            // 3. Tambahkan angka acak sampai tepat 8 karakter huruf kecil + angka
             while (result.length < 8) {
                 const randomDigit = Math.floor(Math.random() * 10);
                 result += randomDigit;
             }
             
-            // Tampilkan hasil dengan tambahan animasi teks memudar masuk
+            // Tampilkan hasil dengan efek animasi teks halus
             const display = document.getElementById("nameDisplay");
             display.innerText = result;
             display.classList.remove("animate-text");
-            void display.offsetWidth; // Memicu ulang jalannya animasi
+            void display.offsetWidth; 
             display.classList.add("animate-text");
             
             document.getElementById("alert").innerText = ""; 
