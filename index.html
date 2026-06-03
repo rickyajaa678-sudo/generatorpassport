@@ -12,12 +12,13 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* KODE DIBAWAH INI SUDAH MEMAKAI NAMA FOTO BARU ANDA */
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
+            transition: background 0.3s ease;
         }
 
+        /* Tampilan Default: Mode Terang (Putih Transparan) */
         .card { 
             background: rgba(255, 255, 255, 0.88); 
             backdrop-filter: blur(8px); 
@@ -29,16 +30,37 @@
             max-width: 400px; 
             width: 90%; 
             border: 4px solid #e67e22; 
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Style Tambahan untuk MODE GELAP (Hitam Transparan) */
+        .dark-mode .card {
+            background: rgba(20, 24, 33, 0.9); 
+            border-color: #f1c40f; /* Ganti bingkai jadi kuning emas bajak laut */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .dark-mode h2 {
+            color: #f1c40f !important;
+        }
+
+        .dark-mode #nameDisplay {
+            background: #2c3e50;
+            color: #f1c40f;
+            border-color: #f1c40f;
         }
 
         h2 {
             color: #2c3e50; 
-            margin-top: 0;
+            margin-top: 10px;
             font-size: 24px;
             font-weight: bold;
             letter-spacing: 1px;
+            transition: color 0.3s ease;
         }
 
+        /* Tombol Utama */
         button { 
             background-color: #e74c3c; 
             color: white; 
@@ -63,6 +85,25 @@
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
+        /* Tombol Switch Dark/Light Mode di Pojok Atas Kartu */
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            transition: transform 0.2s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.2);
+            background: none;
+        }
+
         #nameDisplay { 
             font-size: 26px; 
             font-weight: bold; 
@@ -74,6 +115,7 @@
             border-radius: 8px; 
             border: 2px dashed #e67e22; 
             letter-spacing: 2px; 
+            transition: all 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -90,6 +132,9 @@
 <body>
 
     <div class="card">
+        <!-- Tombol Ikon Bulan / Matahari -->
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <div id="nameDisplay">klik tombol di bawah</div>
         
@@ -100,6 +145,21 @@
     </div>
 
     <script>
+        // Fungsi Mengubah Mode Gelap / Terang
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById("themeBtn");
+            
+            body.classList.toggle("dark-mode");
+            
+            if (body.classList.contains("dark-mode")) {
+                themeBtn.innerText = "☀️"; // Berubah jadi matahari jika mode gelap aktif
+            } else {
+                themeBtn.innerText = "🌙"; // Berubah jadi bulan jika mode terang aktif
+            }
+        }
+
+        // Logika Generator Buah
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
