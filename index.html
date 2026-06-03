@@ -3,15 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kode Buah - Edisi Sunny Go</title>
+    <title>Generator Kode Buah - Edisi Kru Topi Jerami</title>
     <style>
-        /* Animasi Live Wallpaper: Efek ombak/awan bergerak di laut */
-        @keyframes oceanMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         body { 
             font-family: 'Segoe UI', sans-serif; 
             display: flex; 
@@ -19,63 +12,66 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* Warna Gradasi Live Wallpaper bertema Laut & Bendera Topi Jerami (Biru Laut, Hitam, Oranye Sunny) */
-            background: linear-gradient(-45deg, #1abc9c, #2980b9, #2c3e50, #e67e22);
-            background-size: 400% 400%;
-            animation: oceanMove 15s ease infinite;
+            /* Memasang live wallpaper gambar Thousand Sunny dan Kru Topi Jerami di lautan luas */
+            background: url('https://alphacoders.com') no-repeat center center fixed;
+            background-size: cover;
         }
 
-        /* Kartu utama dengan nuansa Thousand Sunny (Kuning Emas & Putih) */
+        /* Kartu utama dibuat semi-transparan (blur) agar gambar latar belakang kapal tetap terlihat indah */
         .card { 
-            background: rgba(255, 255, 255, 0.93); 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(10px); /* Efek kaca buram modern */
+            -webkit-backdrop-filter: blur(10px);
             padding: 30px; 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
             text-align: center; 
             max-width: 400px; 
-            width: 100%; 
-            border: 4px solid #f1c40f; /* Warna kuning khas kepala Sunny Go */
+            width: 90%; 
+            border: 4px solid #e67e22; /* Warna oranye khas logo Thousand Sunny */
         }
 
         h2 {
             color: #2c3e50; 
             margin-top: 0;
-            font-size: 22px;
+            font-size: 24px;
+            font-weight: bold;
             letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
 
-        /* Tombol Utama warna Oranye khas rambut Luffy / Singa Sunny Go dengan efek membal */
+        /* Tombol Utama warna bendera/pakaian ikonik Luffy dengan efek membal */
         button { 
-            background-color: #e67e22; 
+            background-color: #e74c3c; /* Merah pakaian Luffy */
             color: white; 
             border: none; 
-            padding: 12px 24px; 
+            padding: 14px 28px; 
             font-size: 16px; 
             border-radius: 8px; 
             cursor: pointer; 
             margin: 10px; 
             transition: all 0.2s ease; 
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
         button:hover { 
-            background-color: #d35400; 
-            transform: translateY(-2px); 
+            background-color: #c0392b; 
+            transform: translateY(-2px); /* Efek tombol naik sedikit */
         }
         button:active {
-            transform: scale(0.95); 
+            transform: scale(0.95); /* Efek membal saat ditekan */
         }
 
         /* Tombol Salin warna Hijau khas Zoro */
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Bingkai tampilan kode bertema kayu kapal bajak laut */
+        /* Tampilan display kode dibuat menyerupai warna peti harta karun bajak laut */
         #nameDisplay { 
-            font-size: 24px; 
+            font-size: 26px; 
             font-weight: bold; 
             margin: 20px 0; 
-            min-height: 35px; 
+            min-height: 38px; 
             color: #d35400; 
             padding: 12px; 
             background: #fdf6e2; 
@@ -99,7 +95,7 @@
 <body>
 
     <div class="card">
-        <h2>🍊 Generator Kode Buah 🏴‍☠️</h2>
+        <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <!-- Tempat teks kode buah muncul -->
         <div id="nameDisplay">klik tombol di bawah</div>
         
@@ -112,29 +108,25 @@
     </div>
 
     <script>
-        // KODE TETAP BUAH-BUAHAN SEPERTI PERMINTAAN ANDA
+        // Logika kode tetap acak nama buah + angka
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
         ];
 
         function generateFruitNumberCode() {
-            // 1. Pilih nama buah secara acak
             const randomIndex = Math.floor(Math.random() * fruits.length);
             let result = fruits[randomIndex];
             
-            // 2. Potong jika nama buah kepanjangan agar muat sisa angka
             if (result.length > 6) {
                 result = result.substring(0, 5);
             }
             
-            // 3. Tambahkan angka acak sampai tepat 8 karakter huruf kecil + angka
             while (result.length < 8) {
                 const randomDigit = Math.floor(Math.random() * 10);
                 result += randomDigit;
             }
             
-            // Tampilkan hasil dengan efek animasi teks halus
             const display = document.getElementById("nameDisplay");
             display.innerText = result;
             display.classList.remove("animate-text");
@@ -144,7 +136,6 @@
             document.getElementById("alert").innerText = ""; 
         }
 
-        // Fungsi menyalin teks
         function copyCode() {
             const codeText = document.getElementById("nameDisplay").innerText;
             if (codeText === 'klik tombol di bawah') return;
