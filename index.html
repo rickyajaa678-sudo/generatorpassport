@@ -12,6 +12,7 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
+            /* Mengunci latar belakang gambar pilihan Anda */
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
@@ -20,39 +21,28 @@
             position: relative;
         }
 
-        /* Animasi Salju CSS Murni */
-        body::before, body::after {
-            content: "";
+        /* Wadah lapisan salju versi sebelumya (Aman & Ringan) */
+        #snowflake-container {
             position: fixed;
-            top: -100px;
+            top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Jari/kursor mouse akan menembus salju */
+            z-index: 10;
+        }
+
+        /* Bentuk butiran salju halus */
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
             pointer-events: none;
-            z-index: 2;
-            background-image: 
-                radial-gradient(circle, #fff 10%, transparent 11%),
-                radial-gradient(circle, #fff 8%, transparent 9%),
-                radial-gradient(circle, #fff 6%, transparent 7%);
-            background-size: 400px 400px;
-            background-position: 0 0, 150px 200px, 250px 100px;
-            animation: snowFall 12s linear infinite;
             opacity: 0.8;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        body::after {
-            background-size: 300px 300px;
-            background-position: 50px 150px, 200px 50px, 100px 250px;
-            animation-duration: 8s;
-            opacity: 0.5;
-        }
-
-        @keyframes snowFall {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(50vh) translateX(20px); }
-            100% { transform: translateY(100vh) translateX(0); }
-        }
-
+        /* Tampilan Default Kartu: Mode Terang (Putih Transparan) */
         .card { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
@@ -65,10 +55,11 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 10; 
+            z-index: 100; /* Berada di paling depan agar wajib bisa diklik */
             transition: all 0.3s ease;
         }
 
+        /* Style Tambahan untuk MODE GELAP (Hitam Transparan) */
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
             border-color: #f1c40f; 
@@ -137,6 +128,7 @@
             transition: all 0.3s ease;
         }
 
+        /* Kotak Quotes Mutiara Saul */
         .quote-container {
             margin-top: 25px;
             padding: 12px 15px;
@@ -156,6 +148,10 @@
 </head>
 <body>
 
+    <!-- Wadah Efek Salju Halus Seperti Sebelumnya -->
+    <div id="snowflake-container"></div>
+
+    <!-- KOTAK UTAMA GENERATOR -->
     <div class="card">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
@@ -167,6 +163,7 @@
         
         <div id="alert"></div>
 
+        <!-- Kotak Quotes Saul -->
         <div class="quote-container">
             <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
             <p class="quote-author">— Jaguar D. Saul</p>
@@ -174,52 +171,59 @@
     </div>
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // --- LOGIKA UTAMA EFEK SALJU BERGUGURAN HALUS ---
+        const container = document.getElementById('snowflake-container');
+        const maxSnowflakes = 40;
 
-        function playLightningSound() {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
+        function createSnowflake() {
+            if (container.children.length >= maxSnowflakes) return;
+
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            const size = Math.random() * 4 + 2;
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${Math.random() * 100}%`;
+            snowflake.style.top = `-10px`;
+
+            container.appendChild(snowflake);
+
+            let topPos = -10;
+            let leftPos = parseFloat(snowflake.style.left);
+            const drift = Math.random() * 0.4 - 0.2;
+
+            const fallInterval = setInterval(() => {
+                topPos += Math.random() * 1 + 0.5;
+                leftPos += drift;
+
+                snowflake.style.top = `${topPos}px`;
+                snowflake.style.left = `${leftPos}%`;
+
+                if (topPos > window.innerHeight) {
+                    clearInterval(fallInterval);
+                    snowflake.remove();
+                }
+            }, 20);
         }
 
-        function playChimeSound() {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.4);
-        }
+        setInterval(createSnowflake, 300);
 
+        // Logika Tema Dark/Light Mode
         function toggleTheme() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
             body.classList.toggle("dark-mode");
             themeBtn.innerText = body.classList.contains("dark-mode") ? "☀️" : "🌙";
         }
 
+        // Logika Generator Buah + Angka
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
         ];
 
         function generateFruitNumberCode() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            playLightningSound();
-
             const randomIndex = Math.floor(Math.random() * fruits.length);
             let result = fruits[randomIndex];
             
@@ -240,26 +244,32 @@
             document.getElementById("alert").innerText = ""; 
         }
 
-        // ========================================================
-        // PERBAIKAN LOGIKA SALIN: MENGGUNAKAN METODE CADANGAN AMAN
-        // ========================================================
+        // Logika Salin Kode Sistem Aman Cadangan
         function copyCode() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             const codeText = document.getElementById("nameDisplay").innerText;
             if (codeText === 'klik tombol di bawah') return;
 
-            // Membuat kotak teks tersembunyi untuk menyiasati keamanan browser
             const dummyTextArea = document.createElement("textarea");
             document.body.appendChild(dummyTextArea);
             dummyTextArea.value = codeText;
             dummyTextArea.select();
-            dummyTextArea.setSelectionRange(0, 99999); // Untuk perangkat HP
+            dummyTextArea.setSelectionRange(0, 99999);
 
             try {
-                // Mengeksekusi salin teks dengan cara tradisional
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    playChimeSound();
                     const alertDiv = document.getElementById("alert");
                     alertDiv.innerText = "✓ Kode berhasil disalin!";
                     setTimeout(() => { alertDiv.innerText = ""; }, 2000);
+                } else {
+                    alert("Gagal menyalin teks");
+                }
+            } catch (err) {
+                alert("Gagal menyalin teks");
+            }
+
+            document.body.removeChild(dummyTextArea);
+        }
+    </script>
+</body>
+</html>
