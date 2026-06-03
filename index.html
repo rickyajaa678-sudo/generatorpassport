@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kode Buah - Edisi Kru Topi Jerami</title>
+    <title>Generator Kode Buah - Edisi Luffy vs Kaido</title>
     <style>
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -15,10 +15,8 @@
             background: url('thumb-1920-1329456.jpeg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
-            overflow: hidden;
         }
 
-        /* Kotak utama generator dijamin berada di paling depan */
         .card { 
             background: rgba(255, 255, 255, 0.88); 
             backdrop-filter: blur(8px); 
@@ -30,9 +28,6 @@
             max-width: 400px; 
             width: 90%; 
             border: 4px solid #e67e22; 
-            position: relative;
-            z-index: 1000 !important; /* Angka tinggi agar wajib berada di lapisan paling atas */
-            pointer-events: auto !important; /* Memaksa browser mengizinkan klik */
         }
 
         h2 {
@@ -43,8 +38,7 @@
             letter-spacing: 1px;
         }
 
-        /* Tombol aksi utama */
-        .card button { 
+        button { 
             background-color: #e74c3c; 
             color: white; 
             border: none; 
@@ -56,20 +50,17 @@
             transition: all 0.2s ease; 
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 1001 !important;
-            pointer-events: auto !important;
         }
-        .card button:hover { 
+        button:hover { 
             background-color: #c0392b; 
             transform: translateY(-2px); 
         }
-        .card button:active {
+        button:active {
             transform: scale(0.95); 
         }
 
-        .card .copy-btn { background-color: #27ae60; }
-        .card .copy-btn:hover { background-color: #219a52; }
+        .copy-btn { background-color: #27ae60; }
+        .copy-btn:hover { background-color: #219a52; }
 
         #nameDisplay { 
             font-size: 26px; 
@@ -97,7 +88,6 @@
 </head>
 <body>
 
-    <!-- 1. KOTAK GENERATOR UTAMA -->
     <div class="card">
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <div id="nameDisplay">klik tombol di bawah</div>
@@ -108,32 +98,7 @@
         <div id="alert"></div>
     </div>
 
-
-    <!-- 2. WIDGET LIVE CHAT - POSISI ISOLASI DI POJOK -->
-    <div id="chatBox" style="display: none; position: fixed; bottom: 80px; right: 20px; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); border: 3px solid #e67e22; flex-direction: column; overflow: hidden; z-index: 5000;">
-        <div style="background: #e67e22; color: white; padding: 12px; font-weight: bold; font-size: 16px; text-align: center;">
-            ☠️ Kapten Sunny Go Bot
-        </div>
-        <div id="chatBody" style="flex: 1; padding: 10px; overflow-y: auto; background: #fdf6e2; display: flex; flex-direction: column; gap: 8px;">
-            <div style="background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;">
-                Halo nakama! Ada yang bisa kapten bantu? Coba ketik "halo", "fitur", atau "code".
-            </div>
-        </div>
-        <div style="display: flex; border-top: 1px solid #ccc; padding: 5px; background: white;">
-            <input type="text" id="chatInput" placeholder="Ketik pesan di sini..." style="flex: 1; border: none; padding: 8px; outline: none; font-size: 14px;" onkeypress="checkEnter(event)">
-            <button onclick="sendMessage()" style="background: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 0;">Kirim</button>
-        </div>
-    </div>
-
-    <!-- Tombol Aktifkan Chat Terpisah secara absolut -->
-    <button id="chatToggle" onclick="toggleChat()" style="position: fixed; bottom: 20px; right: 20px; z-index: 5001; background: #e67e22; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; margin: 0;">
-        💬 Chat Bajak Laut
-    </button>
-
-
-    <!-- 3. LOGIKA JAVASCRIPT -->
     <script>
-        // Logika Generator Buah
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
@@ -173,67 +138,6 @@
                 alert("Gagal menyalin teks");
             });
         }
-
-        // Logika Jendela Live Chat
-        function toggleChat() {
-            const chatBox = document.getElementById("chatBox");
-            const chatToggle = document.getElementById("chatToggle");
-            if (chatBox.style.display === "none" || chatBox.style.display === "") {
-                chatBox.style.display = "flex";
-                chatToggle.innerText = "✖ Tutup";
-            } else {
-                chatBox.style.display = "none";
-                chatToggle.innerText = "💬 Chat Bajak Laut";
-            }
-        }
-
-        function checkEnter(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        }
-
-        function sendMessage() {
-            const input = document.getElementById("chatInput");
-            const messageText = input.value.trim();
-            if (messageText === "") return;
-
-            const chatBody = document.getElementById("chatBody");
-
-            const userDiv = document.createElement("div");
-            userDiv.style = "background: #3498db; color: white; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-end; font-size: 14px;";
-            userDiv.innerText = messageText;
-            chatBody.appendChild(userDiv);
-
-            input.value = "";
-            chatBody.scrollTop = chatBody.scrollHeight;
-
-            setTimeout(() => {
-                const botReply = getAutoReply(messageText);
-                const botDiv = document.createElement("div");
-                botDiv.style = "background: #faebcc; color: #8a6d3b; padding: 8px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;";
-                botDiv.innerText = botReply;
-                chatBody.appendChild(botDiv);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 800);
-        }
-
-        function getAutoReply(msg) {
-            const teks = msg.toLowerCase();
-
-            if (teks.includes("halo") || teks.includes("hai") || teks.includes("p")) {
-                return "Halo juga nakama! Selamat datang di kapal Thousand Sunny!";
-            } 
-            else if (teks.includes("fitur") || teks.includes("cara")) {
-                return "Situs ini adalah generator kode buah otomatis! Klik saja tombol merah 'Acak Kode' untuk membuat kode 8 digit, lalu klik 'Salin Kode' untuk mencopynya.";
-            } 
-            else if (teks.includes("code") || teks.includes("kode")) {
-                return "Kodenya aman kok, dijamin acak unik dan panjangnya pas 8 digit huruf kecil + angka!";
-            } 
-            else if (teks.includes("luffy") || teks.includes("gear 5") || teks.includes("kaido")) {
-                return "Gomu Gomu no Bajrang Gun!! Luffy mode Dewa Nika siap mengacak kodemu!";
-            }
-            else if (teks.includes("terima kasih") || teks.includes("makasih")) {
-                return "Sama-sama nakama! Berlayar bersamaku menyenangkan!";
-            }
-            else {
+    </script>
+</body>
+</html>
