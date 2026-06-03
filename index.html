@@ -12,13 +12,11 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* Menggunakan gambar Luffy Gear 5 milik Anda */
             background: url('thumb-1920-1329456.jpeg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
         }
 
-        /* Kartu utama generator buah */
         .card { 
             background: rgba(255, 255, 255, 0.88); 
             backdrop-filter: blur(8px); 
@@ -30,6 +28,8 @@
             max-width: 400px; 
             width: 90%; 
             border: 4px solid #e67e22; 
+            position: relative;
+            z-index: 1; /* Memastikan kotak generator berada di lapisan utama agar mudah diklik */
         }
 
         h2 {
@@ -90,7 +90,7 @@
 </head>
 <body>
 
-    <!-- 1. KOTAK GENERATOR UTAMA (YANG SEMPAT HILANG) -->
+    <!-- 1. KOTAK GENERATOR UTAMA -->
     <div class="card">
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <div id="nameDisplay">klik tombol di bawah</div>
@@ -102,15 +102,10 @@
     </div>
 
 
-    <!-- 2. WIDGET LIVE CHAT AUTO BALAS (DI POJOK KANAN BAWAH) -->
-    <div id="chatWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
-        <!-- Tombol untuk Buka/Tutup Chat -->
-        <button id="chatToggle" onclick="toggleChat()" style="background: #e67e22; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; margin: 0;">
-            💬 Chat Bajak Laut
-        </button>
-
-        <!-- Tampilan Jendela Chat -->
-        <div id="chatBox" style="display: none; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); border: 3px solid #e67e22; flex-direction: column; overflow: hidden; margin-top: 10px;">
+    <!-- 2. WIDGET LIVE CHAT AUTO BALAS (PERBAIKAN POSISI STRUKTUR) -->
+    <div id="chatWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: flex-end;">
+        <!-- Tampilan Jendela Chat (Posisinya sekarang ditata vertikal agar tidak menutup area tengah layar) -->
+        <div id="chatBox" style="display: none; width: 300px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); border: 3px solid #e67e22; flex-direction: column; overflow: hidden; margin-bottom: 10px;">
             <div style="background: #e67e22; color: white; padding: 12px; font-weight: bold; font-size: 16px; text-align: center;">
                 ☠️ Kapten Sunny Go Bot
             </div>
@@ -124,12 +119,17 @@
                 <button onclick="sendMessage()" style="background: #27ae60; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 0;">Kirim</button>
             </div>
         </div>
+
+        <!-- Tombol untuk Buka/Tutup Chat -->
+        <button id="chatToggle" onclick="toggleChat()" style="background: #e67e22; color: white; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; margin: 0;">
+            💬 Chat Bajak Laut
+        </button>
     </div>
 
 
-    <!-- 3. LOGIKA JAVASCRIPT (SISTEM GENERATOR & AUTO BALAS CHAT) -->
+    <!-- 3. LOGIKA JAVASCRIPT -->
     <script>
-        // --- Bagian 1: Logika Generator Buah ---
+        // Logika Generator Buah
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
@@ -170,7 +170,7 @@
             });
         }
 
-        // --- Bagian 2: Logika Jendela Live Chat ---
+        // Logika Jendela Live Chat
         function toggleChat() {
             const chatBox = document.getElementById("chatBox");
             const chatToggle = document.getElementById("chatToggle");
@@ -214,7 +214,6 @@
             }, 800);
         }
 
-        // --- Bagian 3: Logika Kata Kunci Auto Balas ---
         function getAutoReply(msg) {
             const teks = msg.toLowerCase();
 
@@ -235,5 +234,3 @@
             }
             else {
                 return "Maaf nakama, Kapten tidak paham arti '" + msg + "'. Coba ketik kata kunci seperti 'halo', 'fitur', atau 'luffy'.";
-            }
-        }
