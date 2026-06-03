@@ -15,9 +15,7 @@
         }
         h1 { margin: 5px 0; font-size: 20px; color: #f1c40f; text-align: center; }
 
-        /* ========================================================
-           LOBBY DAFTAR KRU (KODE BARU: SUPER SIMPEL & PASTI BISA)
-           ======================================================== */
+        /* LOBBY DAFTAR KRU */
         .lobby-container {
             background: #1c2d37; padding: 30px; border-radius: 16px;
             border: 3px solid #f1c40f; max-width: 500px; width: 95%;
@@ -51,9 +49,7 @@
             cursor: pointer; box-shadow: 0 5px 15px rgba(231,76,60,0.4);
         }
 
-        /* ========================================================
-           STRUKTUR GAME UTAMA
-           ======================================================== */
+        /* STRUKTUR GAME UTAMA */
         .game-interface { display: none; width: 100%; max-width: 1000px; gap: 15px; margin-top: 10px; }
         .board-wrapper { flex: 1.2; display: flex; justify-content: center; }
         .board {
@@ -108,7 +104,7 @@
 </head>
 <body>
 
-    <!-- LOBBY SCREEN (SISTEM KLIK INSTAN BARU) -->
+    <!-- LOBBY SCREEN -->
     <div class="lobby-container" id="lobbyScreen">
         <div class="lobby-title">🏴‍☠️ DAFTAR KRU BAJAK LAUT 🏴‍☠️</div>
         <div class="lobby-desc">Klik tombol JOIN pada setiap karakter di bawah untuk mengaktifkan permainan.</div>
@@ -137,7 +133,7 @@
         <button class="start-game-btn" id="startBtn" onclick="startGame()" disabled>MULAI BERLAYAR ⛵</button>
     </div>
 
-    <!-- STRUKTUR INTERFACE PAPAN UTAMA MONOPOLI -->
+    <!-- STRUKTUR PAPAN UTAMA -->
     <h1 id="gameTitle" style="display:none;">🏴‍☠️ GRAND LINE MONOPOLY - EDISI FINAL 🏴‍☠️</h1>
     <div class="game-interface" id="gameScreen">
         <div class="board-wrapper">
@@ -167,3 +163,7 @@
                 <div class="tile" id="tile33">GACHA PETI</div>
 
                 <div class="tile" id="tile16">KERETA LAUT<div class="tile-price">฿ 2.000</div></div>
+                <div style="grid-column: span 9; border: none; background: transparent;"></div>
+                <div class="tile" id="tile34"><div class="color-bar c-green"></div>KURI<div class="tile-price">฿ 3.400</div></div>
+
+                <div class="tile" id="tile15"><div class="color-bar c-pink"></div>WATER 7<div class="tile-price">฿ 1.800</div></div>
