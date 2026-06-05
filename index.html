@@ -5,31 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Kode Buah - Edisi Final Saul & Robin</title>
     <style>
-        /* Gaya Dasar Halaman */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            min-height: 100vh; 
+            height: 100vh; 
             margin: 0; 
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
+            transition: background 0.3s ease;
             overflow: hidden;
             position: relative;
-            box-sizing: border-box;
-            padding: 20px;
         }
 
-        /* PERBAIKAN 1: Memaksa area salju tidak menerima sentuhan/klik apa pun */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none !important; /* Klik mouse dipaksa menembus lapisan salju */
+            pointer-events: none !important;
             z-index: 1;
         }
 
@@ -42,98 +39,63 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* KARTU GENERATOR UTAMA (Diberikan Z-Index tinggi dan dipastikan bisa diklik) */
         .card { 
-            background: rgba(255, 255, 255, 0.75); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            padding: 40px 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
             text-align: center; 
-            width: 100%;
-            max-width: 380px; 
-            min-height: 520px; 
-            border: 2px solid rgba(230, 126, 34, 0.5); 
+            max-width: 400px; 
+            width: 90%; 
+            border: 4px solid #e67e22; 
             position: relative;
-            z-index: 999 !important; /* Berada jauh di depan lapisan salju */
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: auto !important; /* Wajib merespons interaksi klik */
+            z-index: 100; 
+            transition: all 0.3s ease;
         }
 
-        /* Otomatis Mode Gelap */
         .dark-mode .card {
-            background: rgba(20, 24, 33, 0.85); 
-            border-color: rgba(241, 196, 15, 0.4); 
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+            background: rgba(20, 24, 33, 0.9); 
+            border-color: #f1c40f; 
         }
+
         .dark-mode h2 { color: #f1c40f !important; }
-        .dark-mode #nameDisplay { background: #1a202c; color: #f1c40f; border-color: #f1c40f; }
-        .dark-mode .output-textarea { background: #1a202c; color: #edf2f7; border-color: #f1c40f; }
-        .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #cbd5e0; }
+        .dark-mode #nameDisplay { background: #2c3e50; color: #f1c40f; border-color: #f1c40f; }
+        .dark-mode .output-textarea { background: #2c3e50; color: #fff; border-color: #f1c40f; }
+        .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #ddd; }
         .dark-mode .quote-author { color: #f1c40f; }
 
         h2 {
             color: #2c3e50; 
-            margin-top: 0; 
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        #nameDisplay { 
-            font-size: 26px; 
-            font-weight: bold; 
-            margin: 15px 0 10px 0; 
-            color: #d35400; 
-            padding: 12px; 
-            background: #fdfdf6; 
-            border-radius: 12px; 
-            border: 2px dashed #e67e22; 
-            letter-spacing: 2px; 
-        }
-
-        .output-textarea {
-            width: 100%;
-            height: 100px; 
-            margin: 10px 0 15px 0;
-            padding: 12px;
-            border-radius: 12px;
-            border: 2px solid #e67e22;
-            background: #fffdfc;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13.5px;
-            resize: none;
-            box-sizing: border-box; 
+            margin-top: 10px;
+            font-size: 24px;
             font-weight: bold;
-            color: #2d3748;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
         }
 
         .btn-container {
-            margin-top: 5px;
+            margin-top: 10px;
             display: flex;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
+            gap: 10px;
         }
 
         button { 
+            background-color: #e74c3c; 
+            color: white; 
             border: none; 
-            padding: 12px 22px; 
-            font-size: 14.5px; 
-            border-radius: 10px; 
+            padding: 14px 24px; 
+            font-size: 16px; 
+            border-radius: 8px; 
             cursor: pointer; 
+            transition: all 0.2s ease; 
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
-        button:active { transform: scale(0.97); }
-
-        button { background-color: #e74c3c; color: white; }
-        button:hover { background-color: #c0392b; }
+        button:hover { background-color: #c0392b; transform: translateY(-2px); }
+        button:active { transform: scale(0.95); }
 
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
@@ -146,143 +108,175 @@
             border: none;
             font-size: 20px;
             cursor: pointer;
-            z-index: 1000 !important;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            transition: transform 0.2s ease;
+            z-index: 200;
+        }
+        .theme-toggle:hover { transform: scale(1.2); background: none; }
+
+        #nameDisplay { 
+            font-size: 26px; 
+            font-weight: bold; 
+            margin: 20px 0 10px 0; 
+            min-height: 38px; 
+            color: #d35400; 
+            padding: 12px; 
+            background: #fdf6e2; 
+            border-radius: 8px; 
+            border: 2px dashed #e67e22; 
+            letter-spacing: 2px; 
+            transition: all 0.3s ease;
+        }
+
+        .output-textarea {
+            width: 100%;
+            height: 80px;
+            margin: 10px 0 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #e67e22;
+            background: #fffdf9;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: none;
+            box-sizing: border-box; 
+            font-weight: bold;
+            color: #333;
+            transition: all 0.3s ease;
         }
 
         .quote-container {
-            margin-top: 15px;
-            padding: 12px 14px;
-            background: rgba(0, 0, 0, 0.04);
+            margin-top: 20px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.03);
             border-left: 4px solid #e67e22;
-            border-radius: 6px;
+            border-radius: 4px;
             text-align: left;
+            transition: all 0.3s ease;
         }
-        .quote-text { font-style: italic; font-size: 13.5px; color: #4a5568; margin: 0 0 6px 0; line-height: 1.4; }
-        .quote-author { font-size: 11.5px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
-        #alert { color: #27ae60; font-size: 13.5px; height: 18px; font-weight: bold; margin-top: 4px; }
-
-
-        /* ========================================================
-           PERBAIKAN 2: STRUKTUR UTAMA FLATING SIDEBAR AMAN & PASTI MUNCUL
-           ======================================================== */
-        
-        .floating-sidebar-wrapper {
-            position: fixed;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            z-index: 9999 !important; /* Diposisikan di lapisan paling depan layar */
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        /* Keadaan Diciutkan: Seluruh kontainer meluncur keluar batas layar kanan sembunyikan kotak hitam */
-        .floating-sidebar-wrapper.collapsed {
-            transform: translateY(-50%) translateX(220px); 
-        }
-
-        /* Kotak Panel Menu Utama (Hitam) */
-        .floating-menu-panel {
-            background-color: #0b141a;
-            padding: 20px 15px;
-            box-shadow: -5px 10px 30px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 220px;
-            box-sizing: border-box;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Gaya Link Tombol di dalam Panel */
-        .floating-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 14px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-            box-sizing: border-box;
-            text-align: center;
-        }
-        .floating-link:hover {
-            transform: scale(1.03);
-            filter: brightness(1.1);
-        }
-
-        .btn-perfume { background: #25d366; } 
-        .btn-exchange { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); } 
-
-        /* Tombol Lidah Kuning Penarik (Buka/Tutup) */
-        .toggle-tab-btn {
-            background-color: #d49a00;
-            color: #111;
-            border: none;
-            cursor: pointer;
-            padding: 15px 10px;
-            font-weight: bold;
-            font-size: 13px;
-            border-radius: 12px 0 0 12px; 
-            box-shadow: -4px 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            writing-mode: vertical-rl; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            pointer-events: auto !important; /* Pastikan selalu sensitif klik mouse */
-        }
-        .toggle-tab-btn:hover { background-color: #ffb700; }
-        
-        .toggle-tab-btn span {
-            font-size: 11px;
-            transform: rotate(90deg); 
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .collapsed .toggle-tab-btn span {
-            transform: rotate(-90deg);
-        }
+        .quote-text { font-style: italic; font-size: 14.5px; line-height: 1.5; color: #555; margin: 0 0 6px 0; }
+        .quote-author { font-size: 12px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
+        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; margin-top: 5px; }
     </style>
 </head>
 <body class="dark-mode">
 
-    <!-- Efek Salju -->
     <div id="snowflake-container"></div>
 
-    <!-- KARTU GENERATOR UTAMA -->
     <div class="card">
-        <div>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
-            <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
-            <div id="nameDisplay">klik tombol di bawah</div>
-        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
+
+        <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
+        <div id="nameDisplay">klik tombol di bawah</div>
         
         <textarea id="formatDisplay" class="output-textarea" readonly placeholder="Format teks akan muncul di sini..."></textarea>
 
-        <div>
-            <div class="btn-container">
-                <button onclick="generateFruitNumberCode()">Acak Kode</button>
-                <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
-            </div>
-            
-            <div id="alert"></div>
+        <div class="btn-container">
+            <button onclick="generateFruitNumberCode()">Acak Kode</button>
+            <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+        </div>
+        
+        <div id="alert"></div>
 
-            <div class="quote-container">
-                <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
-                <p class="quote-author">— Jaguar D. Saul</p>
-            </div>
+        <div class="quote-container">
+            <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
+            <p class="quote-author">— Jaguar D. Saul</p>
         </div>
     </div>
 
-    <!-- WIDGET SIDEBAR MELAYANG -->
-    <div class="floating-sidebar-wrapper" id="floatingSidebar">
+    <script>
+        const container = document.getElementById('snowflake-container');
+        const maxSnowflakes = 40;
+
+        function createSnowflake() {
+            if (container.children.length >= maxSnowflakes) return;
+
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+
+            const size = Math.random() * 4 + 2;
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${Math.random() * 100}%`;
+            snowflake.style.top = `-10px`;
+
+            container.appendChild(snowflake);
+
+            let topPos = -10;
+            let leftPos = parseFloat(snowflake.style.left);
+            const drift = Math.random() * 0.4 - 0.2;
+
+            const fallInterval = setInterval(() => {
+                topPos += Math.random() * 1 + 0.5;
+                leftPos += drift;
+
+                snowflake.style.top = `${topPos}px`;
+                snowflake.style.left = `${leftPos}%`;
+
+                if (topPos > window.innerHeight) {
+                    clearInterval(fallInterval);
+                    snowflake.remove();
+                }
+            }, 20);
+        }
+
+        setInterval(createSnowflake, 300);
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById("themeBtn");
+            body.classList.toggle("dark-mode");
+            themeBtn.innerText = body.classList.contains("dark-mode") ? "☀️" : "🌙";
+        }
+
+        const fruits = ["apel", "jeruk", "mangga", "pisang", "melon", "durian", "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"];
+
+        function generateFruitNumberCode() {
+            const display = document.getElementById("nameDisplay");
+            const formatDisplay = document.getElementById("formatDisplay");
+            document.getElementById("alert").innerText = ""; 
+
+            const randomIndex = Math.floor(Math.random() * fruits.length);
+            let result = fruits[randomIndex];
+            
+            if (result.length > 5) {
+                result = result.substring(0, 5);
+            }
+            
+            while (result.length < 8) {
+                const randomDigit = Math.floor(Math.random() * 10);
+                result += randomDigit;
+            }
+            
+            display.innerText = result.toLowerCase();
+            formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}\nSilakan dicoba ya bosku , terima kasih`;
+        }
+
+        function copyCode() {
+            const formatDisplay = document.getElementById("formatDisplay");
+            const alertDiv = document.getElementById("alert");
+            const textToCopy = formatDisplay.value;
+
+            if (textToCopy === "") {
+                alertDiv.style.color = "#e74c3c";
+                alertDiv.innerText = "🚨 Acak kode terlebih dahulu!";
+                return;
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alertDiv.style.color = "#27ae60";
+                alertDiv.innerText = "📋 Format Teks berhasil disalin!";
+                
+                setTimeout(() => {
+                    alertDiv.innerText = "";
+                }, 2000);
+            }).catch(err => {
+                alertDiv.style.color = "#e74c3c";
+                alertDiv.innerText = "Gagal menyalin kode.";
+            });
+        }
+    </script>
+</body>
+</html>
