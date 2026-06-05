@@ -9,16 +9,16 @@
         body { 
             font-family: 'Segoe UI', sans-serif; 
             display: flex; 
-            justify-content: center; 
+            justify-content: flex-start; /* PERUBAHAN UTAMA: Memaksa semua konten rata ke kiri */
             align-items: center; 
-            flex-wrap: wrap; /* Memastikan jika layar sempit, sidebar otomatis turun rapi */
+            flex-wrap: wrap; 
             gap: 30px;
             min-height: 100vh; 
             margin: 0; 
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
-            padding: 20px;
+            padding: 40px 40px 40px 80px; /* Memberi jarak manis dari tepi kiri layar */
             box-sizing: border-box;
         }
 
@@ -59,7 +59,7 @@
             box-sizing: border-box;
         }
 
-        /* Wadah Khusus untuk 2 Sidebar di Sebelah Kanan */
+        /* Wadah Khusus untuk 2 Sidebar */
         .sidebar-container {
             display: flex;
             flex-direction: column;
@@ -210,6 +210,14 @@
         .quote-text { font-style: italic; font-size: 14.5px; color: #555; margin: 0 0 6px 0; }
         .quote-author { font-size: 12px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
         #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; margin-top: 8px; }
+
+        /* Modifikasi Responsif di HP agar posisinya kembali ke tengah secara natural */
+        @media (max-width: 768px) {
+            body {
+                justify-content: center;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -217,7 +225,7 @@
     <!-- Efek Salju -->
     <div id="snowflake-container"></div>
 
-    <!-- KARTU UTAMA GENERATOR -->
+    <!-- KARTU UTAMA GENERATOR (Sisi Kiri Pertama) -->
     <div class="card">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
@@ -239,7 +247,7 @@
         </div>
     </div>
 
-    <!-- WADAH 2 SIDEBAR DI SEBELAH KANAN -->
+    <!-- WADAH 2 SIDEBAR (Berjejer Manis di Sebelah Kanan Kartu Utama) -->
     <div class="sidebar-container">
         
         <!-- SIDEBAR 1: LUCKY PERFUME -->
@@ -283,14 +291,3 @@
                 leftPos += drift;
                 snowflake.style.top = `${topPos}px`;
                 snowflake.style.left = `${leftPos}%`;
-                if (topPos > window.innerHeight) {
-                    clearInterval(fallInterval);
-                    snowflake.remove();
-                }
-            }, 20);
-        }
-        setInterval(createSnowflake, 300);
-
-        // Fungsi Ganti Tema
-        function toggleTheme() {
-            document.body.classList.toggle("dark-mode");
