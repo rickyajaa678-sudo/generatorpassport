@@ -22,7 +22,7 @@
             padding: 20px;
         }
 
-        /* Wadah Efek Salju */
+        /* Wadah Efek Salju (Z-Index Paling Belakang agar klik tidak terhalang) */
         #snowflake-container {
             position: fixed;
             top: 0;
@@ -42,7 +42,7 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* KARTU GENERATOR: Diperpanjang ke bawah dan diatur proporsional */
+        /* KARTU GENERATOR UTAMA (Dimensi Diperpanjang ke Bawah & Longgar) */
         .card { 
             background: rgba(255, 255, 255, 0.75); 
             backdrop-filter: blur(12px); 
@@ -53,7 +53,7 @@
             text-align: center; 
             width: 100%;
             max-width: 380px; 
-            min-height: 520px; /* Dikunci memanjang ke bawah agar lebih lega */
+            min-height: 520px; /* Batas tinggi minimum diperpanjang agar tegak memanjang */
             border: 2px solid rgba(230, 126, 34, 0.5); 
             position: relative;
             z-index: 100;
@@ -96,7 +96,7 @@
 
         .output-textarea {
             width: 100%;
-            height: 100px; /* Kotak teks diperbesar agar muat 3 baris teks dengan leluasa */
+            height: 100px; /* Kotak teks diperbesar agar teks ucapan Bosku muat longgar */
             margin: 10px 0 15px 0;
             padding: 12px;
             border-radius: 12px;
@@ -162,7 +162,7 @@
 
 
         /* ========================================================
-           WIDGET SIDEBAR MELAYANG (SUDAH DIPERBAIKI TOTAL & PRESISI)
+           WIDGET FLATING SIDEBAR (SUDAH DIKUNCI MATI DAN PRESISI)
            ======================================================== */
         
         .floating-sidebar-wrapper {
@@ -172,16 +172,16 @@
             transform: translateY(-50%);
             display: flex;
             align-items: center;
-            z-index: 9999; 
+            z-index: 9999; /* Berada paling depan layar monitor */
             transition: transform 0.3s ease;
         }
 
-        /* Geser keluar monitor sejauh lebar panel hitam saat ditutup */
+        /* Saat keadaan ditutup: Panel hitam digeser sejauh 220px ke luar layar kanan */
         .floating-sidebar-wrapper.collapsed {
             transform: translateY(-50%) translateX(220px); 
         }
 
-        /* Kotak Menu Panel Hitam */
+        /* Panel Menu Utama (Kotak Hitam) */
         .floating-menu-panel {
             background-color: #0b141a;
             padding: 20px 15px;
@@ -194,7 +194,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Link di dalam Sidebar */
+        /* Tombol Link Menu */
         .floating-link {
             display: flex;
             align-items: center;
@@ -218,7 +218,7 @@
         .btn-perfume { background: #25d366; } 
         .btn-exchange { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); } 
 
-        /* Tombol Tab Kuning Pengendali */
+        /* Tombol Tab Penarik Kuning */
         .toggle-tab-btn {
             background-color: #d49a00;
             color: #111;
@@ -284,11 +284,9 @@
 
     <!-- WIDGET SIDEBAR MELAYANG -->
     <div class="floating-sidebar-wrapper" id="floatingSidebar">
-        <!-- Tombol tab penarik kuning -->
+        <!-- Tombol lidah kuning berada tepat di kiri panel hitam -->
         <button class="toggle-tab-btn" onclick="toggleSidebarMenu()">
             Tutup <span id="arrowIcon">❯</span>
         </button>
         
-        <!-- Isi panel menu utama hitam -->
-        <div class="floating-menu-panel">
-            <a href="http://netlify.app" target="_blank" class="floating-link btn-perfume">
+        <!-- Panel menu utama hitam -->
