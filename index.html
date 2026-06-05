@@ -19,7 +19,6 @@
             position: relative;
         }
 
-        /* Mengunci area efek agar tidak menghalangi klik sama sekali */
         #snowflake-container {
             position: fixed;
             top: 0;
@@ -83,9 +82,10 @@
             letter-spacing: 2px; 
         }
 
+        /* Ukuran kolom textarea sedikit disesuaikan agar muat 3 baris teks */
         .output-textarea {
             width: 100%;
-            height: 65px;
+            height: 80px;
             margin: 10px 0 15px 0;
             padding: 10px;
             border-radius: 8px;
@@ -213,7 +213,6 @@
         // Kumpulan Data Buah
         const fruits = ["apel", "jeruk", "mangga", "pisang", "melon", "durian", "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"];
 
-        // PERBAIKAN FATAL: Memperbaiki penulisan rumus matematika acak yang typo sebelumnya
         function generateFruitNumberCode() {
             const display = document.getElementById("nameDisplay");
             const formatDisplay = document.getElementById("formatDisplay");
@@ -231,9 +230,10 @@
                 result += randomDigit;
             }
             
-            // Masukkan data hasil acak ke dalam box nama dan box format text baru
             display.innerText = result.toLowerCase();
-            formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}`;
+            
+            // Format teks keluaran baru yang ditambahkan ucapan terima kasih
+            formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}\nSilakan dicoba ya bosku , terima kasih`;
         }
 
         // Fitur Copy Paste Clipboard
