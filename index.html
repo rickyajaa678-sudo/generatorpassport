@@ -76,6 +76,13 @@
             transition: color 0.3s ease;
         }
 
+        /* PERBAIKAN: Memastikan tombol selalu berada di lapisan atas dan bisa merespon klik */
+        .btn-container {
+            position: relative;
+            z-index: 150;
+            margin-top: 10px;
+        }
+
         button { 
             background-color: #e74c3c; 
             color: white; 
@@ -84,10 +91,12 @@
             font-size: 16px; 
             border-radius: 8px; 
             cursor: pointer; 
-            margin: 10px; 
+            margin: 5px; 
             transition: all 0.2s ease; 
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 160;
         }
         button:hover { background-color: #c0392b; transform: translateY(-2px); }
         button:active { transform: scale(0.95); }
@@ -107,13 +116,14 @@
             margin: 0;
             box-shadow: none;
             transition: transform 0.2s ease;
+            z-index: 200;
         }
         .theme-toggle:hover { transform: scale(1.2); background: none; }
 
         #nameDisplay { 
             font-size: 26px; 
             font-weight: bold; 
-            margin: 20px 0; 
+            margin: 20px 0 10px 0; 
             min-height: 38px; 
             color: #d35400; 
             padding: 12px; 
@@ -124,11 +134,11 @@
             transition: all 0.3s ease;
         }
 
-        /* Gaya Kolom Textarea Baru untuk Copy-Paste */
+        /* PERBAIKAN: Ukuran luar textarea diatur ketat (box-sizing) agar tidak luber menutupi tombol */
         .output-textarea {
             width: 100%;
-            height: 60px;
-            margin: 15px 0 5px 0;
+            height: 65px;
+            margin: 10px 0;
             padding: 10px;
             border-radius: 8px;
             border: 2px solid #e67e22;
@@ -136,14 +146,16 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             resize: none;
-            box-sizing: border-box;
+            box-sizing: border-box; 
             font-weight: bold;
             color: #333;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 110;
         }
 
         .quote-container {
-            margin-top: 25px;
+            margin-top: 20px;
             padding: 12px 15px;
             background: rgba(0, 0, 0, 0.03);
             border-left: 4px solid #e67e22;
@@ -169,11 +181,13 @@
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <div id="nameDisplay">klik tombol di bawah</div>
         
-        <!-- Kolom baru untuk format User ID dan Kata Sandi -->
         <textarea id="formatDisplay" class="output-textarea" readonly placeholder="Format teks akan muncul di sini..."></textarea>
 
-        <button onclick="generateFruitNumberCode()">Acak Kode</button>
-        <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+        <!-- PERBAIKAN: Tombol dibungkus container dengan urutan z-index yang aman -->
+        <div class="btn-container">
+            <button onclick="generateFruitNumberCode()">Acak Kode</button>
+            <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+        </div>
         
         <div id="alert"></div>
 
@@ -242,7 +256,7 @@
             const randomIndex = Math.floor(Math.random() * fruits.length);
             let result = fruits[randomIndex];
             
-            if (result.length > 6) {
+            if (result.length > 5) {
                 result = result.substring(0, 5);
             }
             
@@ -251,10 +265,7 @@
                 result += randomDigit;
             }
             
-            // Tampilkan kode utama di kotak atas (dalam format huruf kecil seperti gambar Anda)
             display.innerText = result.toLowerCase();
-            
-            // Otomatis update isi kolom textarea format baru sesuai permintaan Bosku
             formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}`;
             
             display.classList.remove("animate-text");
@@ -273,11 +284,4 @@
                 return;
             }
 
-            // Menyalin isi dari kolom format teks baru
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alertDiv.style.color = "#27ae60";
-                alertDiv.innerText = "📋 Format Teks berhasil disalin!";
-                
-                setTimeout(() => {
-                    alertDiv.innerText = "";
-                }, 2000);
