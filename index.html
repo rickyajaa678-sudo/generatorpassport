@@ -12,7 +12,6 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            /* Mengunci latar belakang gambar pilihan Anda */
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
@@ -21,18 +20,16 @@
             position: relative;
         }
 
-        /* Wadah lapisan salju versi sebelumya (Aman & Ringan) */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Jari/kursor mouse akan menembus salju */
+            pointer-events: none; 
             z-index: 10;
         }
 
-        /* Bentuk butiran salju halus */
         .snowflake {
             position: absolute;
             background: white;
@@ -42,7 +39,6 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Tampilan Default Kartu: Mode Terang (Putih Transparan) */
         .card { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
@@ -55,11 +51,10 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 100; /* Berada di paling depan agar wajib bisa diklik */
+            z-index: 100; 
             transition: all 0.3s ease;
         }
 
-        /* Style Tambahan untuk MODE GELAP (Hitam Transparan) */
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
             border-color: #f1c40f; 
@@ -70,6 +65,7 @@
         .dark-mode #nameDisplay { background: #2c3e50; color: #f1c40f; border-color: #f1c40f; }
         .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #ddd; }
         .dark-mode .quote-author { color: #f1c40f; }
+        .dark-mode .output-textarea { background: #2c3e50; color: #fff; border-color: #f1c40f; }
 
         h2 {
             color: #2c3e50; 
@@ -128,7 +124,24 @@
             transition: all 0.3s ease;
         }
 
-        /* Kotak Quotes Mutiara Saul */
+        /* Gaya Kolom Textarea Baru untuk Copy-Paste */
+        .output-textarea {
+            width: 100%;
+            height: 60px;
+            margin: 15px 0 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #e67e22;
+            background: #fffdf9;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: none;
+            box-sizing: border-box;
+            font-weight: bold;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
         .quote-container {
             margin-top: 25px;
             padding: 12px 15px;
@@ -143,27 +156,27 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .animate-text { animation: fadeIn 0.2s ease forwards; }
-        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; }
+        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <!-- Wadah Efek Salju Halus Seperti Sebelumnya -->
     <div id="snowflake-container"></div>
 
-    <!-- KOTAK UTAMA GENERATOR -->
     <div class="card">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
         <div id="nameDisplay">klik tombol di bawah</div>
         
+        <!-- Kolom baru untuk format User ID dan Kata Sandi -->
+        <textarea id="formatDisplay" class="output-textarea" readonly placeholder="Format teks akan muncul di sini..."></textarea>
+
         <button onclick="generateFruitNumberCode()">Acak Kode</button>
         <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
         
         <div id="alert"></div>
 
-        <!-- Kotak Quotes Saul -->
         <div class="quote-container">
             <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
             <p class="quote-author">— Jaguar D. Saul</p>
@@ -171,7 +184,6 @@
     </div>
 
     <script>
-        // --- LOGIKA UTAMA EFEK SALJU BERGUGURAN HALUS ---
         const container = document.getElementById('snowflake-container');
         const maxSnowflakes = 40;
 
@@ -209,7 +221,6 @@
 
         setInterval(createSnowflake, 300);
 
-        // Logika Tema Dark/Light Mode
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById("themeBtn");
@@ -217,13 +228,17 @@
             themeBtn.innerText = body.classList.contains("dark-mode") ? "☀️" : "🌙";
         }
 
-        // Logika Generator Buah + Angka
         const fruits = [
             "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
             "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
         ];
 
         function generateFruitNumberCode() {
+            const display = document.getElementById("nameDisplay");
+            const formatDisplay = document.getElementById("formatDisplay");
+            const alertDiv = document.getElementById("alert");
+            alertDiv.innerText = ""; 
+
             const randomIndex = Math.floor(Math.random() * fruits.length);
             let result = fruits[randomIndex];
             
@@ -236,40 +251,33 @@
                 result += randomDigit;
             }
             
-            const display = document.getElementById("nameDisplay");
-            display.innerText = result;
+            // Tampilkan kode utama di kotak atas (dalam format huruf kecil seperti gambar Anda)
+            display.innerText = result.toLowerCase();
+            
+            // Otomatis update isi kolom textarea format baru sesuai permintaan Bosku
+            formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}`;
+            
             display.classList.remove("animate-text");
             void display.offsetWidth; 
             display.classList.add("animate-text");
-            document.getElementById("alert").innerText = ""; 
         }
 
-        // Logika Salin Kode Sistem Aman Cadangan
         function copyCode() {
-            const codeText = document.getElementById("nameDisplay").innerText;
-            if (codeText === 'klik tombol di bawah') return;
+            const formatDisplay = document.getElementById("formatDisplay");
+            const alertDiv = document.getElementById("alert");
+            const textToCopy = formatDisplay.value;
 
-            const dummyTextArea = document.createElement("textarea");
-            document.body.appendChild(dummyTextArea);
-            dummyTextArea.value = codeText;
-            dummyTextArea.select();
-            dummyTextArea.setSelectionRange(0, 99999);
-
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    const alertDiv = document.getElementById("alert");
-                    alertDiv.innerText = "✓ Kode berhasil disalin!";
-                    setTimeout(() => { alertDiv.innerText = ""; }, 2000);
-                } else {
-                    alert("Gagal menyalin teks");
-                }
-            } catch (err) {
-                alert("Gagal menyalin teks");
+            if (textToCopy === "") {
+                alertDiv.style.color = "#e74c3c";
+                alertDiv.innerText = "🚨 Acak kode terlebih dahulu!";
+                return;
             }
 
-            document.body.removeChild(dummyTextArea);
-        }
-    </script>
-</body>
-</html>
+            // Menyalin isi dari kolom format teks baru
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alertDiv.style.color = "#27ae60";
+                alertDiv.innerText = "📋 Format Teks berhasil disalin!";
+                
+                setTimeout(() => {
+                    alertDiv.innerText = "";
+                }, 2000);
