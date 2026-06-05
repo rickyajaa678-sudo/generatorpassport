@@ -65,7 +65,7 @@
 
         h2 {
             color: #2c3e50; 
-            margin-top: 10px;
+            margin-top: 15px; /* Menambah sedikit ruang di atas karena ada tombol tema */
             font-size: 24px;
             font-weight: bold;
         }
@@ -82,7 +82,6 @@
             letter-spacing: 2px; 
         }
 
-        /* Ukuran kolom textarea sedikit disesuaikan agar muat 3 baris teks */
         .output-textarea {
             width: 100%;
             height: 80px;
@@ -122,14 +121,19 @@
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
+        /* PERBAIKAN POSISI: Mengunci tombol tema tepat di pojok kanan atas bagian dalam kartu putih */
         .theme-toggle {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: none;
             border: none;
             font-size: 20px;
             cursor: pointer;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            z-index: 110;
         }
 
         .quote-container {
@@ -150,6 +154,7 @@
     <div id="snowflake-container"></div>
 
     <div class="card">
+        <!-- Tombol ganti tema diposisikan relatif terhadap sudut atas kartu ini -->
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
         <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
@@ -171,7 +176,6 @@
     </div>
 
     <script>
-        // Efek Salju Jatuh
         const container = document.getElementById('snowflake-container');
         const maxSnowflakes = 40;
 
@@ -203,14 +207,12 @@
         }
         setInterval(createSnowflake, 300);
 
-        // Fitur Ganti Tema
         function toggleTheme() {
             document.body.classList.toggle("dark-mode");
             const themeBtn = document.getElementById("themeBtn");
             themeBtn.innerText = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
         }
 
-        // Kumpulan Data Buah
         const fruits = ["apel", "jeruk", "mangga", "pisang", "melon", "durian", "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"];
 
         function generateFruitNumberCode() {
@@ -231,12 +233,9 @@
             }
             
             display.innerText = result.toLowerCase();
-            
-            // Format teks keluaran baru yang ditambahkan ucapan terima kasih
             formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}\nSilakan dicoba ya bosku , terima kasih`;
         }
 
-        // Fitur Copy Paste Clipboard
         function copyCode() {
             const formatDisplay = document.getElementById("formatDisplay");
             const alertDiv = document.getElementById("alert");
