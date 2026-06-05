@@ -15,32 +15,30 @@
             background: url('thumb-1920-1409704.jpg') no-repeat center center fixed;
             background-size: cover;
             background-color: #1c2e4a; 
-            transition: background 0.3s ease;
             overflow: hidden;
             position: relative;
         }
 
-        /* SOLUSI UTAMA: Mengizinkan klik menembus lapisan salju ke elemen di bawahnya */
+        /* Mengunci area efek agar tidak menghalangi klik sama sekali */
         #snowflake-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none !important; /* Klik mouse dipaksa menembus lapisan ini */
-            z-index: 10;
+            pointer-events: none !important;
+            z-index: 1;
         }
 
         .snowflake {
             position: absolute;
             background: white;
             border-radius: 50%;
-            pointer-events: none !important; /* Memastikan butiran salju tidak memblokir klik */
+            pointer-events: none !important;
             opacity: 0.8;
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Tampilan Utama Kartu */
         .card { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(8px); 
@@ -53,47 +51,38 @@
             width: 90%; 
             border: 4px solid #e67e22; 
             position: relative;
-            z-index: 100; /* Berada jauh di depan lapisan salju */
-            transition: all 0.3s ease;
-            pointer-events: auto !important; /* Memastikan kartu wajib bisa menerima interaksi klik */
+            z-index: 100; 
         }
 
         .dark-mode .card {
             background: rgba(20, 24, 33, 0.9); 
             border-color: #f1c40f; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
-
         .dark-mode h2 { color: #f1c40f !important; }
         .dark-mode #nameDisplay { background: #2c3e50; color: #f1c40f; border-color: #f1c40f; }
+        .dark-mode .output-textarea { background: #2c3e50; color: #fff; border-color: #f1c40f; }
         .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #ddd; }
         .dark-mode .quote-author { color: #f1c40f; }
-        .dark-mode .output-textarea { background: #2c3e50; color: #fff; border-color: #f1c40f; }
 
         h2 {
             color: #2c3e50; 
             margin-top: 10px;
             font-size: 24px;
             font-weight: bold;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
         }
 
         #nameDisplay { 
             font-size: 26px; 
             font-weight: bold; 
             margin: 20px 0 10px 0; 
-            min-height: 38px; 
             color: #d35400; 
             padding: 12px; 
             background: #fdf6e2; 
             border-radius: 8px; 
             border: 2px dashed #e67e22; 
             letter-spacing: 2px; 
-            transition: all 0.3s ease;
         }
 
-        /* Kolom Textarea Format Baru */
         .output-textarea {
             width: 100%;
             height: 65px;
@@ -108,10 +97,8 @@
             box-sizing: border-box; 
             font-weight: bold;
             color: #333;
-            transition: all 0.3s ease;
         }
 
-        /* Wadah tombol terkunci aman */
         .btn-container {
             margin-top: 10px;
             display: flex;
@@ -127,12 +114,10 @@
             font-size: 16px; 
             border-radius: 8px; 
             cursor: pointer; 
-            transition: all 0.2s ease; 
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        button:hover { background-color: #c0392b; transform: translateY(-2px); }
-        button:active { transform: scale(0.95); }
+        button:hover { background-color: #c0392b; }
 
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
@@ -145,12 +130,7 @@
             border: none;
             font-size: 20px;
             cursor: pointer;
-            padding: 0;
-            margin: 0;
-            box-shadow: none;
-            transition: transform 0.2s ease;
         }
-        .theme-toggle:hover { transform: scale(1.2); background: none; }
 
         .quote-container {
             margin-top: 20px;
@@ -159,22 +139,16 @@
             border-left: 4px solid #e67e22;
             border-radius: 4px;
             text-align: left;
-            transition: all 0.3s ease;
         }
-        .quote-text { font-style: italic; font-size: 14.5px; line-height: 1.5; color: #555; margin: 0 0 6px 0; }
+        .quote-text { font-style: italic; font-size: 14.5px; color: #555; margin: 0 0 6px 0; }
         .quote-author { font-size: 12px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .animate-text { animation: fadeIn 0.2s ease forwards; }
         #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; margin-top: 8px; }
     </style>
 </head>
 <body>
 
-    <!-- Wadah Efek Salju -->
     <div id="snowflake-container"></div>
 
-    <!-- Kotak Utama -->
     <div class="card">
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
@@ -197,21 +171,19 @@
     </div>
 
     <script>
+        // Efek Salju Jatuh
         const container = document.getElementById('snowflake-container');
         const maxSnowflakes = 40;
 
         function createSnowflake() {
             if (container.children.length >= maxSnowflakes) return;
-
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
-
             const size = Math.random() * 4 + 2;
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `-10px`;
-
             container.appendChild(snowflake);
 
             let topPos = -10;
@@ -221,36 +193,31 @@
             const fallInterval = setInterval(() => {
                 topPos += Math.random() * 1 + 0.5;
                 leftPos += drift;
-
                 snowflake.style.top = `${topPos}px`;
                 snowflake.style.left = `${leftPos}%`;
-
                 if (topPos > window.innerHeight) {
                     clearInterval(fallInterval);
                     snowflake.remove();
                 }
             }, 20);
         }
-
         setInterval(createSnowflake, 300);
 
+        // Fitur Ganti Tema
         function toggleTheme() {
-            const body = document.body;
+            document.body.classList.toggle("dark-mode");
             const themeBtn = document.getElementById("themeBtn");
-            body.classList.toggle("dark-mode");
-            themeBtn.innerText = body.classList.contains("dark-mode") ? "☀️" : "🌙";
+            themeBtn.innerText = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
         }
 
-        const fruits = [
-            "apel", "jeruk", "mangga", "pisang", "melon", "durian", 
-            "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"
-        ];
+        // Kumpulan Data Buah
+        const fruits = ["apel", "jeruk", "mangga", "pisang", "melon", "durian", "jambu", "nanas", "anggur", "pepaya", "salak", "manggis"];
 
+        // PERBAIKAN FATAL: Memperbaiki penulisan rumus matematika acak yang typo sebelumnya
         function generateFruitNumberCode() {
             const display = document.getElementById("nameDisplay");
             const formatDisplay = document.getElementById("formatDisplay");
-            const alertDiv = document.getElementById("alert");
-            alertDiv.innerText = ""; 
+            document.getElementById("alert").innerText = ""; 
 
             const randomIndex = Math.floor(Math.random() * fruits.length);
             let result = fruits[randomIndex];
@@ -264,14 +231,12 @@
                 result += randomDigit;
             }
             
+            // Masukkan data hasil acak ke dalam box nama dan box format text baru
             display.innerText = result.toLowerCase();
             formatDisplay.value = `User id : \nKata sandi : ${result.toLowerCase()}`;
-            
-            display.classList.remove("animate-text");
-            void display.offsetWidth; 
-            display.classList.add("animate-text");
         }
 
+        // Fitur Copy Paste Clipboard
         function copyCode() {
             const formatDisplay = document.getElementById("formatDisplay");
             const alertDiv = document.getElementById("alert");
@@ -281,3 +246,17 @@
                 alertDiv.style.color = "#e74c3c";
                 alertDiv.innerText = "🚨 Acak kode terlebih dahulu!";
                 return;
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alertDiv.style.color = "#27ae60";
+                alertDiv.innerText = "📋 Format Teks berhasil disalin!";
+                setTimeout(() => { alertDiv.innerText = ""; }, 2000);
+            }).catch(() => {
+                alertDiv.style.color = "#e74c3c";
+                alertDiv.innerText = "Gagal menyalin kode.";
+            });
+        }
+    </script>
+</body>
+</html>
