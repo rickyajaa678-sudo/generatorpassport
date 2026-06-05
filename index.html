@@ -7,9 +7,9 @@
     <style>
         /* Gaya Dasar Halaman */
         body { 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
-            justify-content: center; /* Kartu utama dikunci di tengah layar */
+            justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
@@ -22,7 +22,7 @@
             padding: 20px;
         }
 
-        /* Wadah Efek Salju */
+        /* Wadah Efek Salju (Dipastikan berada paling belakang dan menembus klik) */
         #snowflake-container {
             position: fixed;
             top: 0;
@@ -42,152 +42,168 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Kartu Utama Generator (Tetap di tengah layar) */
-        .card { 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px);
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
-            text-align: center; 
+        /* TATA LETAK UTAMA: Menyusun konten secara rapi berdampingan tanpa bertumpuk */
+        .workspace-layout {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: center;
+            gap: 25px;
             width: 100%;
-            max-width: 380px; 
-            border: 4px solid #e67e22; 
+            max-width: 750px;
+            z-index: 100;
             position: relative;
-            z-index: 100; 
+        }
+
+        /* Kartu Utama Generator Premium Glassmorphism */
+        .card { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+            text-align: center; 
+            flex: 1;
+            max-width: 380px; 
+            border: 2px solid rgba(230, 126, 34, 0.5); 
+            position: relative;
             box-sizing: border-box;
         }
 
-        /* PERBAIKAN UTAMA: Mengunci wadah sidebar menempel di ujung kanan layar */
+        /* Wadah Bar Sidebar Terpadu */
         .sidebar-container {
-            position: absolute;
-            right: 30px; /* Jarak 30px dari pinggir layar kanan */
-            top: 50%;
-            transform: translateY(-50%); /* Membuat bar panjang pas di tengah secara vertikal */
             display: flex;
             flex-direction: column;
             gap: 20px;
-            width: 260px;
-            z-index: 100;
+            width: 280px;
+            justify-content: space-between;
         }
 
-        /* Kotak Sidebar */
+        /* Kotak Rekomendasi Minimalis Modern */
         .sidebar-box {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border-left: 6px solid #e67e22;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 22px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            border-top: 5px solid #e67e22;
             text-align: left;
             box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .sidebar-box h3 {
-            margin: 0 0 8px 0;
+            margin: 0 0 10px 0;
             color: #2c3e50;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-box p {
-            margin: 0 0 15px 0;
-            color: #555;
+            margin: 0 0 18px 0;
+            color: #4a5568;
             font-size: 13.5px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
-        /* Style Otomatis untuk MODE GELAP */
+        /* Penyesuaian Otomatis Tema Gelap (Dark Mode) */
         .dark-mode .card, .dark-mode .sidebar-box {
-            background: rgba(20, 24, 33, 0.9); 
-            border-color: #f1c40f; 
+            background: rgba(20, 24, 33, 0.85); 
+            border-color: rgba(241, 196, 15, 0.4); 
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
         }
         .dark-mode h2, .dark-mode .sidebar-box h3 { color: #f1c40f !important; }
-        .dark-mode #nameDisplay { background: #2c3e50; color: #f1c40f; border-color: #f1c40f; }
-        .dark-mode .output-textarea { background: #2c3e50; color: #fff; border-color: #f1c40f; }
-        .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #ddd; }
+        .dark-mode #nameDisplay { background: #1a202c; color: #f1c40f; border-color: #f1c40f; }
+        .dark-mode .output-textarea { background: #1a202c; color: #edf2f7; border-color: #f1c40f; }
+        .dark-mode .quote-container { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1c40f; color: #cbd5e0; }
         .dark-mode .quote-author { color: #f1c40f; }
-        .dark-mode .sidebar-box p { color: #ccc; }
+        .dark-mode .sidebar-box p { color: #a0aec0; }
         .dark-mode .link-btn { background-color: #2980b9; }
         .dark-mode .link-btn:hover { background-color: #3498db; }
 
         h2 {
             color: #2c3e50; 
-            margin-top: 15px; 
-            font-size: 24px;
-            font-weight: bold;
+            margin-top: 10px; 
+            font-size: 22px;
+            font-weight: 700;
         }
 
         #nameDisplay { 
             font-size: 26px; 
             font-weight: bold; 
-            margin: 20px 0 10px 0; 
+            margin: 15px 0 10px 0; 
             color: #d35400; 
             padding: 12px; 
-            background: #fdf6e2; 
-            border-radius: 8px; 
+            background: #fdfdf6; 
+            border-radius: 12px; 
             border: 2px dashed #e67e22; 
             letter-spacing: 2px; 
         }
 
         .output-textarea {
             width: 100%;
-            height: 80px;
+            height: 85px;
             margin: 10px 0 15px 0;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             border: 2px solid #e67e22;
-            background: #fffdf9;
+            background: #fffdfc;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+            font-size: 13.5px;
             resize: none;
             box-sizing: border-box; 
             font-weight: bold;
-            color: #333;
+            color: #2d3748;
         }
 
         .btn-container {
-            margin-top: 10px;
+            margin-top: 5px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
         button, .link-btn { 
-            background-color: #e74c3c; 
-            color: white; 
             border: none; 
-            padding: 14px 24px; 
-            font-size: 15px; 
-            border-radius: 8px; 
+            padding: 12px 22px; 
+            font-size: 14.5px; 
+            border-radius: 10px; 
             cursor: pointer; 
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             text-decoration: none; 
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease-in-out;
             box-sizing: border-box;
         }
-        button:hover, .link-btn:hover { transform: translateY(-2px); }
+        button:hover, .link-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+        button:active, .link-btn:active { transform: scale(0.97); }
+
+        button { background-color: #e74c3c; color: white; }
+        button:hover { background-color: #c0392b; }
 
         .copy-btn { background-color: #27ae60; }
         .copy-btn:hover { background-color: #219a52; }
 
-        /* Tombol Link Khusus di Dalam Sidebar */
         .link-btn { 
             background-color: #34495e; 
+            color: white;
             width: 100%;
             font-size: 13px;
             padding: 10px 12px;
+            margin-top: auto;
         }
         .link-btn:hover { background-color: #2c3e50; }
 
-        /* Tombol Ganti Tema (Pojok Kanan Atas Kartu) */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -198,37 +214,32 @@
             cursor: pointer;
             padding: 0;
             margin: 0;
-            box-shadow: none;
-            z-index: 110;
         }
 
         .quote-container {
-            margin-top: 20px;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.03);
+            margin-top: 18px;
+            padding: 12px 14px;
+            background: rgba(0, 0, 0, 0.04);
             border-left: 4px solid #e67e22;
-            border-radius: 4px;
+            border-radius: 6px;
             text-align: left;
         }
-        .quote-text { font-style: italic; font-size: 14.5px; color: #555; margin: 0 0 6px 0; }
-        .quote-author { font-size: 12px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
-        #alert { color: #27ae60; font-size: 14px; height: 20px; font-weight: bold; margin-top: 8px; }
+        .quote-text { font-style: italic; font-size: 13.5px; color: #4a5568; margin: 0 0 6px 0; line-height: 1.4; }
+        .quote-author { font-size: 11.5px; font-weight: bold; color: #e67e22; text-align: right; margin: 0; }
+        #alert { color: #27ae60; font-size: 13.5px; height: 18px; font-weight: bold; margin-top: 6px; }
 
-        /* Modifikasi Responsif: Jika di HP, sidebar otomatis lepas dari kanan dan turun ke bawah generator */
-        @media (max-width: 992px) {
-            body {
+        /* Responsivitas Mobile: Menumpuk otomatis di layar kecil */
+        @media (max-width: 720px) {
+            .workspace-layout {
                 flex-direction: column;
-                justify-content: flex-start;
-                height: auto;
-                gap: 30px;
+                align-items: center;
             }
-            .sidebar-container {
-                position: relative;
-                right: auto;
-                top: auto;
-                transform: none;
+            .card, .sidebar-container {
                 width: 100%;
                 max-width: 380px;
+            }
+            .sidebar-container {
+                gap: 15px;
             }
         }
     </style>
@@ -238,57 +249,50 @@
     <!-- Efek Salju -->
     <div id="snowflake-container"></div>
 
-    <!-- KARTU UTAMA GENERATOR (TETAP DI TENGAH LAYAR) -->
-    <div class="card">
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
-
-        <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
-        <div id="nameDisplay">klik tombol di bawah</div>
+    <!-- WADAH WORKSPACE UTAMA -->
+    <div class="workspace-layout">
         
-        <textarea id="formatDisplay" class="output-textarea" readonly placeholder="Format teks akan muncul di sini..."></textarea>
+        <!-- KARTU UTAMA GENERATOR -->
+        <div class="card">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
-        <div class="btn-container">
-            <button onclick="generateFruitNumberCode()">Acak Kode</button>
-            <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
-        </div>
-        
-        <div id="alert"></div>
+            <h2>🏴‍☠️ Straw Hat Fruit Generator 🍊</h2>
+            <div id="nameDisplay">klik tombol di bawah</div>
+            
+            <textarea id="formatDisplay" class="output-textarea" readonly placeholder="Format teks akan muncul di sini..."></textarea>
 
-        <div class="quote-container">
-            <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
-            <p class="quote-author">— Jaguar D. Saul</p>
-        </div>
-    </div>
+            <div class="btn-container">
+                <button onclick="generateFruitNumberCode()">Acak Kode</button>
+                <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+            </div>
+            
+            <div id="alert"></div>
 
-    <!-- WADAH SIDEBAR (DIPISAH DAN DIGESER JAUH KE PINGGIR KANAN) -->
-    <div class="sidebar-container">
-        
-        <!-- SIDEBAR 1: LUCKY PERFUME -->
-        <div class="sidebar-box">
-            <h3>🛍️ Rekomendasi Toko</h3>
-            <p>Beli parfume online bisa di LuckyPerfume dengan aroma premium pilihan.</p>
-            <a href="http://netlify.app" target="_blank" class="link-btn">🔗 Kunjungi LuckyPerfume</a>
+            <div class="quote-container">
+                <p class="quote-text">"Laut itu luas... Suatu hari nanti, pasti akan muncul teman yang akan melindungimu!"</p>
+                <p class="quote-author">— Jaguar D. Saul</p>
+            </div>
         </div>
 
-        <!-- SIDEBAR 2: NEKO EXCHANGE -->
-        <div class="sidebar-box">
-            <h3>💱 Penukaran Mata Uang</h3>
-            <p>Beli USD-Riel bisa di NekoExchange dengan proses aman dan kurs terbaik.</p>
-            <a href="https://vercel.app" target="_blank" class="link-btn">🔗 Buka NekoExchange</a>
+        <!-- BAR UTAMA SIDEBAR (Sisi Kanan Kartu) -->
+        <div class="sidebar-container">
+            
+            <!-- KOTAK 1: LUCKY PERFUME -->
+            <div class="sidebar-box">
+                <h3>🛍️ Rekomendasi Toko</h3>
+                <p>Beli parfume online bisa di LuckyPerfume dengan aroma premium pilihan.</p>
+                <a href="http://netlify.app" target="_blank" class="link-btn">🔗 Kunjungi LuckyPerfume</a>
+            </div>
+
+            <!-- KOTAK 2: NEKO EXCHANGE -->
+            <div class="sidebar-box">
+                <h3>💱 Penukaran Mata Uang</h3>
+                <p>Beli USD-Riel bisa di NekoExchange dengan proses aman dan kurs terbaik.</p>
+                <a href="https://vercel.app" target="_blank" class="link-btn">🔗 Buka NekoExchange</a>
+            </div>
+
         </div>
 
     </div>
 
     <script>
-        // Logika Efek Salju
-        const container = document.getElementById('snowflake-container');
-        const maxSnowflakes = 40;
-
-        function createSnowflake() {
-            if (container.children.length >= maxSnowflakes) return;
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            const size = Math.random() * 4 + 2;
-            snowflake.style.width = `${size}px`;
-            snowflake.style.height = `${size}px`;
-            snowflake.style.left = `${Math.random() * 100}%`;
